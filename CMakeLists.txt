@@ -67,6 +67,10 @@ add_library(imagenn_core STATIC
     src/link.cpp
     src/layer.cpp
     src/network.cpp
+    src/config.cpp
+    src/model_io.cpp
+    src/dataset.cpp
+    src/plot.cpp
 )
 target_include_directories(imagenn_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(imagenn_core PUBLIC stb_image)
@@ -85,6 +89,8 @@ enable_testing()
 
 add_executable(imagenn_tests tests/test_main.cpp)
 target_link_libraries(imagenn_tests PRIVATE imagenn_core doctest::doctest)
+target_compile_definitions(imagenn_tests
+    PRIVATE IMAGENN_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/examples")
 
 include(${doctest_SOURCE_DIR}/scripts/cmake/doctest.cmake)
 doctest_discover_tests(imagenn_tests)

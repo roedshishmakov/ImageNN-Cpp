@@ -2,13 +2,20 @@
 #include <doctest/doctest.h>
 
 #include <algorithm>
+#include <filesystem>
+#include <fstream>
 #include <numeric>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 
 #include "imagenn/activations.hpp"
+#include "imagenn/config.hpp"
+#include "imagenn/dataset.hpp"
 #include "imagenn/exceptions.hpp"
+#include "imagenn/model_io.hpp"
 #include "imagenn/network.hpp"
+#include "imagenn/plot.hpp"
 #include "imagenn/rng.hpp"
 #include "imagenn/version.hpp"
 
@@ -22,6 +29,11 @@ NeuralNetwork make_small_network() {
     nn.add_layer(3, sigmoid_activation(), 0.5, true);
     nn.add_layer(2, softmax_activation(), 0.5, false);
     return nn;
+}
+
+/// Путь к временному файлу для тестов ввода-вывода.
+std::string temp_path(const std::string& name) {
+    return (std::filesystem::temp_directory_path() / name).string();
 }
 } // namespace
 
@@ -141,4 +153,127 @@ TEST_CASE("best index points to the largest output") {
     REQUIRE(best >= 0);
     CHECK(out[static_cast<std::size_t>(best)] ==
           doctest::Approx(*std::max_element(out.begin(), out.end())));
+}
+
+TEST_CASE("config parsing reads layers and training parameters") {
+    const std::string path = temp_path("imagenn_cfg_ok.config");
+    {
+        std::ofstream file(path);
+        file << "# network\n";
+        file << "dense:32:relu:true:0.1\n";
+        file << "dense:10:softmax:false:0.2\n";
+        file << "\n# training\n";
+        file << "learning_rate=0.05\nepochs=7\nclip_value=3.0\nuse_cross_entropy=false\n";
+    }
+
+    const NetworkConfig config = parse_config_file(path);
+    REQUIRE(config.layers.size() == 2);
+    CHECK(config.layers[0].size == 32);
+    CHECK(config.layers[0].activation == "relu");
+    CHECK(config.layers[0].use_bias == true);
+    CHECK(config.layers[1].activation == "softmax");
+    CHECK(config.layers[1].use_bias == false);
+    CHECK(config.training.epochs == 7);
+    CHECK(config.training.learning_rate == doctest::Approx(0.05));
+    CHECK(config.training.use_cross_entropy == false);
+    std::filesystem::remove(path);
+}
+
+TEST_CASE("config parsing rejects a malformed layer line") {
+    const std::string path = temp_path("imagenn_cfg_bad.config");
+    {
+        std::ofstream file(path);
+        file << "dense:32:relu:true\n"; // не хватает поля
+    }
+    CHECK_THROWS_AS(parse_config_file(path), ValidationError);
+    std::filesystem::remove(path);
+}
+
+TEST_CASE("config survives a save/load round trip") {
+    const std::string path = temp_path("imagenn_cfg_roundtrip.config");
+    const NetworkConfig original = default_config();
+    save_config(original, path);
+
+    const NetworkConfig restored = parse_config_file(path);
+    REQUIRE(restored.layers.size() == original.layers.size());
+    for (std::size_t i = 0; i < original.layers.size(); ++i) {
+        CHECK(restored.layers[i].size == original.layers[i].size);
+        CHECK(restored.layers[i].activation == original.layers[i].activation);
+        CHECK(restored.layers[i].use_bias == original.layers[i].use_bias);
+    }
+    CHECK(restored.training.epochs == original.training.epochs);
+    std::filesystem::remove(path);
+}
+
+TEST_CASE("a saved model reloads into an identical network") {
+    set_random_seed(11);
+    NeuralNetwork source = make_small_network();
+    const std::vector<double> input = {0.3, 0.9};
+    source.run(input);
+    const std::vector<double> expected = source.get_output();
+
+    const std::string path = temp_path("imagenn_model.nn");
+    save_model(source, path);
+
+    set_random_seed(222);
+    NeuralNetwork target = make_small_network();
+    load_model(target, path);
+    target.run(input);
+    const std::vector<double> restored = target.get_output();
+
+    REQUIRE(restored.size() == expected.size());
+    for (std::size_t i = 0; i < expected.size(); ++i) {
+        CHECK(restored[i] == doctest::Approx(expected[i]));
+    }
+    std::filesystem::remove(path);
+}
+
+TEST_CASE("loading a missing model reports a path error") {
+    NeuralNetwork nn = make_small_network();
+    CHECK_THROWS_AS(load_model(nn, temp_path("imagenn_missing.nn")), PathError);
+}
+
+TEST_CASE("loss history survives a save/load round trip") {
+    const std::string path = temp_path("imagenn_loss.txt");
+    const std::vector<double> losses = {0.9, 0.6, 0.4};
+    save_losses(losses, path);
+
+    const std::vector<double> restored = load_losses(path);
+    REQUIRE(restored.size() == losses.size());
+    for (std::size_t i = 0; i < losses.size(); ++i) {
+        CHECK(restored[i] == doctest::Approx(losses[i]));
+    }
+    std::filesystem::remove(path);
+}
+
+TEST_CASE("loading missing loss history reports a path error") {
+    CHECK_THROWS_AS(load_losses(temp_path("imagenn_no_loss.txt")), PathError);
+}
+
+TEST_CASE("training examples are loaded with one-hot targets") {
+    const std::vector<TrainingExample> data = load_training_examples(IMAGENN_TEST_DATA_DIR);
+    REQUIRE_FALSE(data.empty());
+    for (const TrainingExample& example : data) {
+        CHECK(example.first.size() == static_cast<std::size_t>(kInputSize));
+        CHECK(example.second.size() == static_cast<std::size_t>(kNumClasses));
+        CHECK(std::accumulate(example.second.begin(), example.second.end(), 0.0) ==
+              doctest::Approx(1.0));
+    }
+
+    // Бинаризация должна давать смесь закрашенных и пустых пикселей.
+    const std::vector<double>& first = data.front().first;
+    const double filled = std::accumulate(first.begin(), first.end(), 0.0);
+    CHECK(filled > 0.0);
+    CHECK(filled < static_cast<double>(kInputSize));
+}
+
+TEST_CASE("loading from a missing directory reports a path error") {
+    CHECK_THROWS_AS(load_inputs(temp_path("imagenn_no_such_dir")), PathError);
+}
+
+TEST_CASE("loss plot renders a header and rejects empty input") {
+    std::ostringstream out;
+    show_loss_ascii({1.0, 0.5, 0.25}, out);
+    CHECK(out.str().find("Total loss") != std::string::npos);
+    CHECK_THROWS_AS(show_loss_ascii({}, out), ValidationError);
 }
