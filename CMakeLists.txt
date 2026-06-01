@@ -61,6 +61,7 @@ target_include_directories(stb_image INTERFACE ${stb_SOURCE_DIR})
 # ---------------------------------------------------------------------------
 add_library(imagenn_core STATIC
     src/version.cpp
+    src/activations.cpp
 )
 target_include_directories(imagenn_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(imagenn_core PUBLIC stb_image)
