@@ -93,6 +93,22 @@ class ActivationSoftmax : public ActivationBase {
     static std::vector<double> calc_layer(const std::vector<double>& layer_outputs);
 };
 
+/// @brief Возвращает разделяемый экземпляр прозрачной функции активации.
+/// @return ссылка на синглтон ActivationTransparent
+const ActivationTransparent& transparent_activation();
+
+/// @brief Возвращает разделяемый экземпляр функции ReLU.
+/// @return ссылка на синглтон ActivationRelu
+const ActivationRelu& relu_activation();
+
+/// @brief Возвращает разделяемый экземпляр сигмоидальной функции.
+/// @return ссылка на синглтон ActivationSigmoid
+const ActivationSigmoid& sigmoid_activation();
+
+/// @brief Возвращает разделяемый экземпляр функции softmax.
+/// @return ссылка на синглтон ActivationSoftmax
+const ActivationSoftmax& softmax_activation();
+
 } // namespace imagenn
 
 #endif // IMAGENN_ACTIVATIONS_HPP
