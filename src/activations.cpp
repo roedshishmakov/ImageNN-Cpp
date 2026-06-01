@@ -72,4 +72,24 @@ std::vector<double> ActivationSoftmax::calc_layer(const std::vector<double>& lay
     return values;
 }
 
+const ActivationTransparent& transparent_activation() {
+    static const ActivationTransparent instance;
+    return instance;
+}
+
+const ActivationRelu& relu_activation() {
+    static const ActivationRelu instance;
+    return instance;
+}
+
+const ActivationSigmoid& sigmoid_activation() {
+    static const ActivationSigmoid instance;
+    return instance;
+}
+
+const ActivationSoftmax& softmax_activation() {
+    static const ActivationSoftmax instance;
+    return instance;
+}
+
 } // namespace imagenn
