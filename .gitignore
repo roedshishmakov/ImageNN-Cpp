@@ -13,10 +13,6 @@ cmake_install.cmake
 Makefile
 _deps/
 
-# Doxygen generated output (kept folder, ignore generated html/latex)
-/docs/html/
-/docs/latex/
-
 # IDE
 .idea/
 .vscode/
