@@ -94,3 +94,15 @@ target_compile_definitions(imagenn_tests
 
 include(${doctest_SOURCE_DIR}/scripts/cmake/doctest.cmake)
 doctest_discover_tests(imagenn_tests)
+
+# ---------------------------------------------------------------------------
+# Documentation (optional target, available when Doxygen is installed)
+# ---------------------------------------------------------------------------
+find_package(Doxygen QUIET)
+if(DOXYGEN_FOUND)
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM)
+endif()
