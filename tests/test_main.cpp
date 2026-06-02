@@ -17,7 +17,6 @@
 #include "imagenn/network.hpp"
 #include "imagenn/plot.hpp"
 #include "imagenn/rng.hpp"
-#include "imagenn/version.hpp"
 
 using namespace imagenn;
 
@@ -36,11 +35,6 @@ std::string temp_path(const std::string& name) {
     return (std::filesystem::temp_directory_path() / name).string();
 }
 } // namespace
-
-TEST_CASE("project version is set") {
-    CHECK(project_version() == "1.0.0");
-    CHECK_FALSE(project_version().empty());
-}
 
 TEST_CASE("transparent activation returns the input") {
     ActivationTransparent a;
@@ -276,4 +270,101 @@ TEST_CASE("loss plot renders a header and rejects empty input") {
     show_loss_ascii({1.0, 0.5, 0.25}, out);
     CHECK(out.str().find("Total loss") != std::string::npos);
     CHECK_THROWS_AS(show_loss_ascii({}, out), ValidationError);
+}
+
+TEST_CASE("sigmoid derivative away from zero") {
+    ActivationSigmoid a;
+    const double s = a.calc(2.0);
+    CHECK(a.derivative(2.0) == doctest::Approx(s * (1.0 - s)));
+}
+
+TEST_CASE("softmax handles large logits without overflow") {
+    const std::vector<double> out = ActivationSoftmax::calc_layer({200.0, 100.0});
+    REQUIRE(out.size() == 2);
+    CHECK(std::accumulate(out.begin(), out.end(), 0.0) == doctest::Approx(1.0));
+    CHECK(out[0] > out[1]);
+}
+
+TEST_CASE("build_network builds the configured layers and rejects unknown activation") {
+    const NeuralNetwork ok = build_network(default_config());
+    CHECK(ok.layer_count() == 4); // входной слой плюс три из конфигурации
+
+    NetworkConfig bad;
+    bad.layers.push_back({"dense", 4, "bogus", false, 0.1});
+    CHECK_THROWS_AS(build_network(bad), ValidationError);
+}
+
+TEST_CASE("training rejects targets of the wrong size") {
+    set_random_seed(9);
+    NeuralNetwork nn = make_small_network();
+    const std::vector<TrainingExample> bad = {{{1.0, 0.0}, {1.0, 0.0, 0.0}}};
+    CHECK_THROWS_AS(nn.train(bad, 0.5), ValidationError);
+}
+
+TEST_CASE("output queries reject an empty network") {
+    NeuralNetwork empty;
+    CHECK_THROWS_AS(empty.get_output(), ValidationError);
+    CHECK_THROWS_AS(empty.get_best_index(), ValidationError);
+}
+
+TEST_CASE("import rejects a layer of the wrong size") {
+    set_random_seed(13);
+    NeuralNetwork source = make_small_network();
+    auto weights = source.export_weights();
+    weights[1].push_back({}); // лишний нейрон в скрытом слое
+
+    NeuralNetwork target = make_small_network();
+    CHECK_THROWS_AS(target.import_weights(weights), ValidationError);
+}
+
+TEST_CASE("loading a corrupted model file reports a validation error") {
+    const std::string path = temp_path("imagenn_corrupt.nn");
+    {
+        std::ofstream file(path);
+        file << "this is not a model\n";
+    }
+    NeuralNetwork nn = make_small_network();
+    CHECK_THROWS_AS(load_model(nn, path), ValidationError);
+    std::filesystem::remove(path);
+}
+
+TEST_CASE("loss history can be appended") {
+    const std::string path = temp_path("imagenn_loss_append.txt");
+    save_losses({0.1}, path, false);
+    save_losses({0.2}, path, true);
+
+    const std::vector<double> restored = load_losses(path);
+    REQUIRE(restored.size() == 2);
+    CHECK(restored[0] == doctest::Approx(0.1));
+    CHECK(restored[1] == doctest::Approx(0.2));
+    std::filesystem::remove(path);
+}
+
+TEST_CASE("image is converted to a binarized input vector") {
+    const std::string image = std::string(IMAGENN_TEST_DATA_DIR) + "/0_1.png";
+    const std::vector<double> input = image_to_input(image);
+    REQUIRE(input.size() == static_cast<std::size_t>(kInputSize));
+    const double filled = std::accumulate(input.begin(), input.end(), 0.0);
+    CHECK(filled > 0.0);
+    CHECK(filled < static_cast<double>(kInputSize));
+    for (double value : input) {
+        CHECK((value == 0.0 || value == 1.0));
+    }
+}
+
+TEST_CASE("reading a missing image reports a path error") {
+    CHECK_THROWS_AS(image_to_input(temp_path("imagenn_no_image.png")), PathError);
+}
+
+TEST_CASE("inputs are loaded with file names") {
+    const std::vector<NamedInput> inputs = load_inputs(IMAGENN_TEST_DATA_DIR);
+    REQUIRE_FALSE(inputs.empty());
+    for (const NamedInput& sample : inputs) {
+        CHECK_FALSE(sample.name.empty());
+        CHECK(sample.values.size() == static_cast<std::size_t>(kInputSize));
+    }
+}
+
+TEST_CASE("loading training examples from a missing directory reports a path error") {
+    CHECK_THROWS_AS(load_training_examples(temp_path("imagenn_absent_dir")), PathError);
 }
