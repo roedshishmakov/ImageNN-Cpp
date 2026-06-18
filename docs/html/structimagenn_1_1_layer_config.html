@@ -93,7 +93,7 @@ $(function(){initNavTree('structimagenn_1_1_layer_config.html','','structimagenn
 </div><!--header-->
 <div class="contents">
 
-<p>Описание одного слоя сети.  
+<p>Описание одного слоя.  
  <a href="#details">Подробнее...</a></p>
 
 <p><code>#include &lt;<a class="el" href="config_8hpp_source.html">config.hpp</a>&gt;</code></p>
@@ -101,18 +101,25 @@ $(function(){initNavTree('structimagenn_1_1_layer_config.html','','structimagenn
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Открытые атрибуты</h2></td></tr>
 <tr class="memitem:aa7e22e51eadbc55899ab9073ac96188b" id="r_aa7e22e51eadbc55899ab9073ac96188b"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#aa7e22e51eadbc55899ab9073ac96188b">type</a></td></tr>
-<tr class="memdesc:aa7e22e51eadbc55899ab9073ac96188b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Тип слоя (поддерживается только "dense").  <br /></td></tr>
+<tr class="memdesc:aa7e22e51eadbc55899ab9073ac96188b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Тип слоя.  <br /></td></tr>
 <tr class="memitem:aa917adf49548edd96b10c2034f0cd22d" id="r_aa917adf49548edd96b10c2034f0cd22d"><td class="memItemLeft">std::size_t&#160;</td><td class="memItemRight"><a class="el" href="#aa917adf49548edd96b10c2034f0cd22d">size</a> = 0</td></tr>
-<tr class="memdesc:aa917adf49548edd96b10c2034f0cd22d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Количество нейронов.  <br /></td></tr>
+<tr class="memdesc:aa917adf49548edd96b10c2034f0cd22d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Число нейронов (dense).  <br /></td></tr>
 <tr class="memitem:a9ec799c49c2f788517c9d7d585a6f06e" id="r_a9ec799c49c2f788517c9d7d585a6f06e"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a9ec799c49c2f788517c9d7d585a6f06e">activation</a></td></tr>
-<tr class="memdesc:a9ec799c49c2f788517c9d7d585a6f06e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Имя функции активации.  <br /></td></tr>
+<tr class="memdesc:a9ec799c49c2f788517c9d7d585a6f06e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Имя функции активации (dense, conv).  <br /></td></tr>
 <tr class="memitem:ac0823432ed80071d973d8301bcd12028" id="r_ac0823432ed80071d973d8301bcd12028"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ac0823432ed80071d973d8301bcd12028">use_bias</a> = false</td></tr>
-<tr class="memdesc:ac0823432ed80071d973d8301bcd12028"><td class="mdescLeft">&#160;</td><td class="mdescRight">Использовать ли нейрон смещения.  <br /></td></tr>
+<tr class="memdesc:ac0823432ed80071d973d8301bcd12028"><td class="mdescLeft">&#160;</td><td class="mdescRight">Использовать ли смещение (dense).  <br /></td></tr>
 <tr class="memitem:ae8226e8ab54e6a9f9ccf456659e3e06b" id="r_ae8226e8ab54e6a9f9ccf456659e3e06b"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ae8226e8ab54e6a9f9ccf456659e3e06b">random_radius</a> = 0.1</td></tr>
-<tr class="memdesc:ae8226e8ab54e6a9f9ccf456659e3e06b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Радиус инициализации весов.  <br /></td></tr>
+<tr class="memdesc:ae8226e8ab54e6a9f9ccf456659e3e06b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Радиус инициализации весов (dense, conv).  <br /></td></tr>
+<tr class="memitem:a671da8ca453cee87fe600b4f4ef2fe1c" id="r_a671da8ca453cee87fe600b4f4ef2fe1c"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a671da8ca453cee87fe600b4f4ef2fe1c">filters</a> = 0</td></tr>
+<tr class="memdesc:a671da8ca453cee87fe600b4f4ef2fe1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Число фильтров (conv).  <br /></td></tr>
+<tr class="memitem:a9fed2cd48f6e113b80b7d34a5201e90a" id="r_a9fed2cd48f6e113b80b7d34a5201e90a"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a9fed2cd48f6e113b80b7d34a5201e90a">kernel</a> = 0</td></tr>
+<tr class="memdesc:a9fed2cd48f6e113b80b7d34a5201e90a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сторона ядра (conv).  <br /></td></tr>
+<tr class="memitem:ace272d0c3d261cd0be348aa11ef8ad27" id="r_ace272d0c3d261cd0be348aa11ef8ad27"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ace272d0c3d261cd0be348aa11ef8ad27">pool</a> = 0</td></tr>
+<tr class="memdesc:ace272d0c3d261cd0be348aa11ef8ad27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сторона окна подвыборки (maxpool).  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
-<div class="textblock"><p>Описание одного слоя сети. </p>
+<div class="textblock"><p>Описание одного слоя. </p>
+<p>Тип слоя задаётся полем type ("dense", "conv", "maxpool", "flatten"); используются те поля, что относятся к данному типу. </p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Данные класса</h2>
 <a id="a9ec799c49c2f788517c9d7d585a6f06e" name="a9ec799c49c2f788517c9d7d585a6f06e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9ec799c49c2f788517c9d7d585a6f06e">&#9670;&#160;</a></span>activation</h2>
@@ -126,7 +133,55 @@ $(function(){initNavTree('structimagenn_1_1_layer_config.html','','structimagenn
       </table>
 </div><div class="memdoc">
 
-<p>Имя функции активации. </p>
+<p>Имя функции активации (dense, conv). </p>
+
+</div>
+</div>
+<a id="a671da8ca453cee87fe600b4f4ef2fe1c" name="a671da8ca453cee87fe600b4f4ef2fe1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a671da8ca453cee87fe600b4f4ef2fe1c">&#9670;&#160;</a></span>filters</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int imagenn::LayerConfig::filters = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Число фильтров (conv). </p>
+
+</div>
+</div>
+<a id="a9fed2cd48f6e113b80b7d34a5201e90a" name="a9fed2cd48f6e113b80b7d34a5201e90a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fed2cd48f6e113b80b7d34a5201e90a">&#9670;&#160;</a></span>kernel</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int imagenn::LayerConfig::kernel = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Сторона ядра (conv). </p>
+
+</div>
+</div>
+<a id="ace272d0c3d261cd0be348aa11ef8ad27" name="ace272d0c3d261cd0be348aa11ef8ad27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace272d0c3d261cd0be348aa11ef8ad27">&#9670;&#160;</a></span>pool</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int imagenn::LayerConfig::pool = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Сторона окна подвыборки (maxpool). </p>
 
 </div>
 </div>
@@ -142,7 +197,7 @@ $(function(){initNavTree('structimagenn_1_1_layer_config.html','','structimagenn
       </table>
 </div><div class="memdoc">
 
-<p>Радиус инициализации весов. </p>
+<p>Радиус инициализации весов (dense, conv). </p>
 
 </div>
 </div>
@@ -158,7 +213,7 @@ $(function(){initNavTree('structimagenn_1_1_layer_config.html','','structimagenn
       </table>
 </div><div class="memdoc">
 
-<p>Количество нейронов. </p>
+<p>Число нейронов (dense). </p>
 
 </div>
 </div>
@@ -174,7 +229,7 @@ $(function(){initNavTree('structimagenn_1_1_layer_config.html','','structimagenn
       </table>
 </div><div class="memdoc">
 
-<p>Тип слоя (поддерживается только "dense"). </p>
+<p>Тип слоя. </p>
 
 </div>
 </div>
@@ -190,7 +245,7 @@ $(function(){initNavTree('structimagenn_1_1_layer_config.html','','structimagenn
       </table>
 </div><div class="memdoc">
 
-<p>Использовать ли нейрон смещения. </p>
+<p>Использовать ли смещение (dense). </p>
 
 </div>
 </div>

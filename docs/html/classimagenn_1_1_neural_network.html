@@ -108,6 +108,10 @@ $(function(){initNavTree('classimagenn_1_1_neural_network.html','','classimagenn
 <tr class="memdesc:a71296006cf63731e22a8d6768c545368"><td class="mdescLeft">&#160;</td><td class="mdescRight">Прогоняет вход через сеть.  <br /></td></tr>
 <tr class="memitem:aa56a893a3ea09e1b64c055bbec3161eb" id="r_aa56a893a3ea09e1b64c055bbec3161eb"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#aa56a893a3ea09e1b64c055bbec3161eb">train</a> (const std::vector&lt; <a class="el" href="namespaceimagenn.html#a2f4805ed15da037b488bda51429eaa67">TrainingExample</a> &gt; &amp;data, double speed, bool verbose=false, double clip_value=5.0, bool use_clip=true)</td></tr>
 <tr class="memdesc:aa56a893a3ea09e1b64c055bbec3161eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Обучает сеть на наборе примеров за один проход.  <br /></td></tr>
+<tr class="memitem:a404cbb023d4023001d94b274854b2e13" id="r_a404cbb023d4023001d94b274854b2e13"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a404cbb023d4023001d94b274854b2e13">input_gradient</a> () const</td></tr>
+<tr class="memdesc:a404cbb023d4023001d94b274854b2e13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Возвращает градиент по значениям входного слоя.  <br /></td></tr>
+<tr class="memitem:ac608bf3772343c0282f25c1226fbb149" id="r_ac608bf3772343c0282f25c1226fbb149"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ac608bf3772343c0282f25c1226fbb149">backward_step</a> (const std::vector&lt; double &gt; &amp;target, double speed, double clip_value, bool use_clip, std::vector&lt; double &gt; *input_grad_out)</td></tr>
+<tr class="memdesc:ac608bf3772343c0282f25c1226fbb149"><td class="mdescLeft">&#160;</td><td class="mdescRight">Выполняет обратный проход для одного примера; <a class="el" href="#a71296006cf63731e22a8d6768c545368" title="Прогоняет вход через сеть.">run()</a> должен быть уже вызван.  <br /></td></tr>
 <tr class="memitem:a250e077f639abbca14770caae6e7a79f" id="r_a250e077f639abbca14770caae6e7a79f"><td class="memItemLeft">std::vector&lt; std::vector&lt; std::vector&lt; double &gt; &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a250e077f639abbca14770caae6e7a79f">export_weights</a> () const</td></tr>
 <tr class="memdesc:a250e077f639abbca14770caae6e7a79f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Экспортирует веса всех слоёв.  <br /></td></tr>
 <tr class="memitem:a6048e0707bc26bea93aa9e35bfbf418a" id="r_a6048e0707bc26bea93aa9e35bfbf418a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6048e0707bc26bea93aa9e35bfbf418a">import_weights</a> (const std::vector&lt; std::vector&lt; std::vector&lt; double &gt; &gt; &gt; &amp;data)</td></tr>
@@ -198,6 +202,55 @@ $(function(){initNavTree('classimagenn_1_1_neural_network.html','','classimagenn
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ac608bf3772343c0282f25c1226fbb149" name="ac608bf3772343c0282f25c1226fbb149"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac608bf3772343c0282f25c1226fbb149">&#9670;&#160;</a></span>backward_step()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double imagenn::NeuralNetwork::backward_step </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>target</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>speed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>clip_value</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>use_clip</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; *</td>          <td class="paramname"><span class="paramname"><em>input_grad_out</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Выполняет обратный проход для одного примера; <a class="el" href="#a71296006cf63731e22a8d6768c545368" title="Прогоняет вход через сеть.">run()</a> должен быть уже вызван. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>эталонный вектор </td></tr>
+    <tr><td class="paramname">speed</td><td>скорость обучения </td></tr>
+    <tr><td class="paramname">clip_value</td><td>порог ограничения дельты веса </td></tr>
+    <tr><td class="paramname">use_clip</td><td>применять ли ограничение </td></tr>
+    <tr><td class="paramname">input_grad_out</td><td>если не nullptr, сюда записывается градиент по входу </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>потеря на этом примере </dd></dl>
 
 </div>
 </div>
@@ -334,6 +387,26 @@ $(function(){initNavTree('classimagenn_1_1_neural_network.html','','classimagenn
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a404cbb023d4023001d94b274854b2e13" name="a404cbb023d4023001d94b274854b2e13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a404cbb023d4023001d94b274854b2e13">&#9670;&#160;</a></span>input_gradient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; imagenn::NeuralNetwork::input_gradient </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Возвращает градиент по значениям входного слоя. </p>
+<p>Действителен после обратного прохода и до применения дельт. </p><dl class="section return"><dt>Возвращает</dt><dd>градиент по каждому входу сети </dd></dl>
 
 </div>
 </div>

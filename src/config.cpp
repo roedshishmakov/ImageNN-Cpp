@@ -1,6 +1,7 @@
 #include "imagenn/config.hpp"
 
 #include <fstream>
+#include <memory>
 #include <sstream>
 
 #include "imagenn/activations.hpp"
@@ -52,21 +53,44 @@ const ActivationBase& activation_by_name(const std::string& name) {
 
 LayerConfig parse_layer_line(const std::string& line, std::size_t line_number) {
     const std::vector<std::string> parts = split(line, ':');
-    if (parts.size() != 5) {
-        throw ValidationError("Invalid layer format at line " + std::to_string(line_number));
-    }
-
     LayerConfig layer;
     layer.type = trim(parts[0]);
-    if (layer.type != "dense") {
-        throw ValidationError("Unknown layer type at line " + std::to_string(line_number));
-    }
+
+    // stoi/stod бросают invalid_argument/out_of_range; их переводим в ValidationError.
     try {
-        layer.size = static_cast<std::size_t>(std::stoul(trim(parts[1])));
-        layer.activation = trim(parts[2]);
-        layer.use_bias = to_bool(parts[3]);
-        layer.random_radius = std::stod(trim(parts[4]));
-    } catch (const std::exception&) {
+        if (layer.type == "dense") {
+            if (parts.size() != 5) {
+                throw ValidationError("Invalid dense layer at line " + std::to_string(line_number));
+            }
+            layer.size = static_cast<std::size_t>(std::stoul(trim(parts[1])));
+            layer.activation = trim(parts[2]);
+            layer.use_bias = to_bool(parts[3]);
+            layer.random_radius = std::stod(trim(parts[4]));
+        } else if (layer.type == "conv") {
+            if (parts.size() != 5) {
+                throw ValidationError("Invalid conv layer at line " + std::to_string(line_number));
+            }
+            layer.filters = std::stoi(trim(parts[1]));
+            layer.kernel = std::stoi(trim(parts[2]));
+            layer.activation = trim(parts[3]);
+            layer.random_radius = std::stod(trim(parts[4]));
+        } else if (layer.type == "maxpool") {
+            if (parts.size() != 2) {
+                throw ValidationError("Invalid maxpool layer at line " +
+                                      std::to_string(line_number));
+            }
+            layer.pool = std::stoi(trim(parts[1]));
+        } else if (layer.type == "flatten") {
+            if (parts.size() != 1) {
+                throw ValidationError("Invalid flatten layer at line " +
+                                      std::to_string(line_number));
+            }
+        } else {
+            throw ValidationError("Unknown layer type at line " + std::to_string(line_number));
+        }
+    } catch (const std::invalid_argument&) {
+        throw ValidationError("Invalid layer values at line " + std::to_string(line_number));
+    } catch (const std::out_of_range&) {
         throw ValidationError("Invalid layer values at line " + std::to_string(line_number));
     }
     return layer;
@@ -137,11 +161,19 @@ void save_config(const NetworkConfig& config, const std::string& path) {
         throw PathError("Cannot open config file for writing: " + path);
     }
 
-    file << "# Конфигурация нейронной сети\n";
-    file << "# Формат: [layer_type]:[size]:[activation]:[use_bias]:[random_radius]\n\n";
+    file << "# Конфигурация нейронной сети\n\n";
     for (const LayerConfig& layer : config.layers) {
-        file << "dense:" << layer.size << ":" << layer.activation << ":"
-             << (layer.use_bias ? "true" : "false") << ":" << layer.random_radius << "\n";
+        if (layer.type == "conv") {
+            file << "conv:" << layer.filters << ":" << layer.kernel << ":" << layer.activation
+                 << ":" << layer.random_radius << "\n";
+        } else if (layer.type == "maxpool") {
+            file << "maxpool:" << layer.pool << "\n";
+        } else if (layer.type == "flatten") {
+            file << "flatten\n";
+        } else {
+            file << "dense:" << layer.size << ":" << layer.activation << ":"
+                 << (layer.use_bias ? "true" : "false") << ":" << layer.random_radius << "\n";
+        }
     }
 
     file << "\n# Параметры обучения\n";
@@ -163,14 +195,68 @@ NetworkConfig default_config() {
     return config;
 }
 
-NeuralNetwork build_network(const NetworkConfig& config) {
-    NeuralNetwork network;
-    network.add_input_layer(kInputSize);
+Model build_model(const NetworkConfig& config) {
+    Model model;
+    int channels = 1;
+    int height = kImageSize;
+    int width = kImageSize;
+    bool flattened = false;
+    bool dense_started = false;
+    int flat_size = 0;
+
     for (const LayerConfig& layer : config.layers) {
-        network.add_layer(layer.size, activation_by_name(layer.activation), layer.random_radius,
-                          layer.use_bias);
+        if (layer.type == "conv") {
+            if (flattened) {
+                throw ValidationError("Convolution layer must precede flatten and dense layers");
+            }
+            if (layer.activation == "softmax") {
+                throw ValidationError("Convolution layer cannot use softmax activation");
+            }
+            std::unique_ptr<ConvLayer> conv = std::make_unique<ConvLayer>(
+                channels, height, width, layer.filters, layer.kernel,
+                activation_by_name(layer.activation), layer.random_radius);
+            channels = conv->out_channels();
+            height = conv->out_height();
+            width = conv->out_width();
+            model.add_spatial(std::move(conv));
+        } else if (layer.type == "maxpool") {
+            if (flattened) {
+                throw ValidationError("Pooling layer must precede flatten and dense layers");
+            }
+            std::unique_ptr<MaxPoolLayer> pool =
+                std::make_unique<MaxPoolLayer>(channels, height, width, layer.pool);
+            channels = pool->out_channels();
+            height = pool->out_height();
+            width = pool->out_width();
+            model.add_spatial(std::move(pool));
+        } else if (layer.type == "flatten") {
+            if (flattened) {
+                throw ValidationError("Duplicate flatten layer");
+            }
+            model.add_spatial(std::make_unique<FlattenLayer>(channels, height, width));
+            flat_size = channels * height * width;
+            flattened = true;
+        } else if (layer.type == "dense") {
+            if (!flattened) {
+                model.add_spatial(std::make_unique<FlattenLayer>(channels, height, width));
+                flat_size = channels * height * width;
+                flattened = true;
+            }
+            if (!dense_started) {
+                model.dense().add_input_layer(static_cast<std::size_t>(flat_size));
+                dense_started = true;
+            }
+            model.dense().add_layer(layer.size, activation_by_name(layer.activation),
+                                    layer.random_radius, layer.use_bias);
+        } else {
+            throw ValidationError("Unknown layer type: " + layer.type);
+        }
     }
-    return network;
+
+    if (!dense_started) {
+        throw ValidationError("Configuration has no dense layers");
+    }
+    return model;
 }
 
 } // namespace imagenn

@@ -99,6 +99,7 @@ $(function(){initNavTree('index.html','',''); });
 Возможности</h1>
 <ul>
 <li>Полносвязная нейронная сеть произвольной архитектуры, задаваемой конфигурацией.</li>
+<li>Свёрточные слои (Conv2D), подвыборка по максимуму (MaxPooling) и выпрямление (Flatten).</li>
 <li>Функции активации: Transparent, ReLU, Sigmoid, Softmax.</li>
 <li>Выходной слой softmax с обучением по кросс-энтропии.</li>
 <li>Обучение с нуля, дообучение сохранённой модели.</li>
@@ -225,10 +226,9 @@ $(function(){initNavTree('index.html','',''); });
 <div class="line">        --weights-dir /data/models --loss-dir /data/losses --configs-dir /data/configs</div>
 </div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
 Формат конфигурации</h1>
-<p>Текстовый файл <span class="tt">&lt;name&gt;.config</span>:</p>
+<p>Текстовый файл <span class="tt">&lt;name&gt;.config</span> задаёт слои по порядку, затем параметры обучения. Поддерживаются свёрточные слои, подвыборка, выпрямление и полносвязные слои.</p>
+<p>Полносвязная сеть:</p>
 <div class="fragment"><div class="line"># Конфигурация нейронной сети</div>
-<div class="line"># Формат: [layer_type]:[size]:[activation]:[use_bias]:[random_radius]</div>
-<div class="line"> </div>
 <div class="line">dense:32:relu:true:0.1</div>
 <div class="line">dense:32:relu:true:0.1</div>
 <div class="line">dense:10:softmax:false:0.1</div>
@@ -238,13 +238,32 @@ $(function(){initNavTree('index.html','',''); });
 <div class="line">epochs=10</div>
 <div class="line">clip_value=5.0</div>
 <div class="line">use_cross_entropy=true</div>
-</div><!-- fragment --><ul>
-<li><span class="tt">layer_type</span> — всегда <span class="tt">dense</span>.</li>
-<li><span class="tt">activation</span> — <span class="tt">relu</span>, <span class="tt">sigmoid</span>, <span class="tt">softmax</span> или <span class="tt">transparent</span>.</li>
+</div><!-- fragment --><p>Свёрточная сеть:</p>
+<div class="fragment"><div class="line">conv:8:3:relu:0.1</div>
+<div class="line">maxpool:2</div>
+<div class="line">conv:16:3:relu:0.1</div>
+<div class="line">flatten</div>
+<div class="line">dense:32:relu:true:0.1</div>
+<div class="line">dense:10:softmax:false:0.1</div>
+<div class="line"> </div>
+<div class="line">learning_rate=0.05</div>
+<div class="line">epochs=10</div>
+<div class="line">clip_value=5.0</div>
+<div class="line">use_cross_entropy=true</div>
+</div><!-- fragment --><p>Форматы строк слоёв:</p>
+<ul>
+<li><span class="tt">dense:[size]:[activation]:[use_bias]:[random_radius]</span> — полносвязный слой.</li>
+<li><span class="tt">conv:[filters]:[kernel]:[activation]:[random_radius]</span> — свёрточный слой (шаг 1, без дополнения краёв).</li>
+<li><span class="tt">maxpool:[size]</span> — подвыборка по максимуму с окном size×size.</li>
+<li><span class="tt">flatten</span> — выпрямление карт признаков в вектор.</li>
+</ul>
+<p>Где:</p>
+<ul>
+<li><span class="tt">activation</span> — <span class="tt">relu</span>, <span class="tt">sigmoid</span>, <span class="tt">softmax</span> или <span class="tt">transparent</span> (для <span class="tt">conv</span> — кроме <span class="tt">softmax</span>).</li>
 <li><span class="tt">use_bias</span> — <span class="tt">true</span> или <span class="tt">false</span>.</li>
 <li><span class="tt">random_radius</span> — радиус равномерной инициализации весов.</li>
 </ul>
-<p>Входной слой (256 входов) добавляется автоматически.</p>
+<p>Вход — изображение 16×16 в оттенках серого, приведённое к диапазону [0, 1]. Свёрточные слои и подвыборка должны идти до выпрямления, полносвязные — после. Если строка <span class="tt">flatten</span> не указана, выпрямление добавляется автоматически перед первым <span class="tt">dense</span>.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
 Формат датасета</h1>
 <ul>

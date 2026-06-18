@@ -8,8 +8,8 @@
 #include "imagenn/config.hpp"
 #include "imagenn/dataset.hpp"
 #include "imagenn/exceptions.hpp"
+#include "imagenn/model.hpp"
 #include "imagenn/model_io.hpp"
-#include "imagenn/network.hpp"
 #include "imagenn/plot.hpp"
 #include "imagenn/version.hpp"
 
@@ -106,8 +106,8 @@ void require_existing_path(const std::string& path, const std::string& descripti
 }
 
 /// @brief Обучает сеть и сохраняет модель, конфигурацию и историю потерь.
-void train_and_save(NeuralNetwork& network, const NetworkConfig& config,
-                    const std::vector<TrainingExample>& data, const CliOptions& opt,
+void train_and_save(Model& network, const NetworkConfig& config,
+                    const std::vector<SpatialExample>& data, const CliOptions& opt,
                     const std::string& model, bool append_losses) {
     std::vector<double> history;
     for (int epoch = 0; epoch < config.training.epochs; ++epoch) {
@@ -142,12 +142,12 @@ void command_train(const std::vector<std::string>& args, const CliOptions& opt, 
     const std::string& model = args[0];
     NetworkConfig config = parse_config_file(config_path(opt, args[1]));
 
-    NeuralNetwork network = build_network(config);
+    Model network = build_model(config);
     const std::string saved_config = config_path(opt, model);
     ensure_parent_dir(saved_config);
     save_config(config, saved_config);
 
-    const std::vector<TrainingExample> data = load_training_examples(args[2]);
+    const std::vector<SpatialExample> data = load_training_examples(args[2]);
     std::cout << "Loaded " << data.size() << " training examples\n";
 
     train_and_save(network, config, data, opt, model, false);
@@ -161,12 +161,12 @@ void command_simple_train(const std::vector<std::string>& args, const CliOptions
     NetworkConfig config = default_config();
     config.training.epochs = parse_epochs(args[1], 10000);
 
-    NeuralNetwork network = build_network(config);
+    Model network = build_model(config);
     const std::string saved_config = config_path(opt, model);
     ensure_parent_dir(saved_config);
     save_config(config, saved_config);
 
-    const std::vector<TrainingExample> data = load_training_examples(args[2]);
+    const std::vector<SpatialExample> data = load_training_examples(args[2]);
     std::cout << "Loaded " << data.size() << " training examples\n";
 
     train_and_save(network, config, data, opt, model, false);
@@ -185,10 +185,10 @@ void command_fine(const std::vector<std::string>& args, const CliOptions& opt, b
     config.training.learning_rate = 0.01;
     config.training.epochs = additional_epochs;
 
-    NeuralNetwork network = build_network(config);
+    Model network = build_model(config);
     load_model(network, model_path(opt, model));
 
-    const std::vector<TrainingExample> data = load_training_examples(args[2]);
+    const std::vector<SpatialExample> data = load_training_examples(args[2]);
     std::cout << "Loaded " << data.size() << " examples for fine-tuning\n";
 
     train_and_save(network, config, data, opt, model, true);
@@ -201,7 +201,7 @@ void command_load(const std::vector<std::string>& args, const CliOptions& opt, b
     const std::string& model = args[0];
     const std::string config_file = config_path(opt, model);
 
-    NeuralNetwork network = build_network(
+    Model network = build_model(
         std::filesystem::exists(config_file) ? parse_config_file(config_file) : default_config());
     load_model(network, model_path(opt, model));
 
@@ -209,9 +209,9 @@ void command_load(const std::vector<std::string>& args, const CliOptions& opt, b
         show_loss_ascii(load_losses(loss_path(opt, model)), std::cout);
     }
 
-    const std::vector<NamedInput> inputs = load_inputs(args[1]);
-    for (const NamedInput& sample : inputs) {
-        network.run(sample.values);
+    const std::vector<NamedImage> images = load_images(args[1]);
+    for (const NamedImage& sample : images) {
+        network.run(sample.image);
         std::cout << "Test file: " << sample.name << "  Answer: " << network.get_best_index()
                   << "\n";
     }

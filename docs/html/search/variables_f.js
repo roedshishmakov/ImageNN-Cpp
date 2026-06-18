@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['weight_5f_0',['weight_',['../classimagenn_1_1_link.html#a6e6840b0622596bd2149498b0f1b93bd',1,'imagenn::Link']]],
-  ['weight_5fdelta_5f_1',['weight_delta_',['../classimagenn_1_1_link.html#afe58a4f546c569e1b156b7c0a56abf6d',1,'imagenn::Link']]],
-  ['weight_5fdelta_5fparam_5f_2',['weight_delta_param_',['../classimagenn_1_1_link.html#a2b7ad09837cd81f8b50625e269194982',1,'imagenn::Link']]]
+  ['to_5f_0',['to_',['../classimagenn_1_1_link.html#a73b04b45adabb1ca886e7d4d61606a2b',1,'imagenn::Link']]],
+  ['training_1',['training',['../structimagenn_1_1_network_config.html#add8b3ac738572ca5dc4455c7fe613d36',1,'imagenn::NetworkConfig']]],
+  ['type_2',['type',['../structimagenn_1_1_layer_config.html#aa7e22e51eadbc55899ab9073ac96188b',1,'imagenn::LayerConfig']]]
 ];

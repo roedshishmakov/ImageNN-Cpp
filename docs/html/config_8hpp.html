@@ -98,14 +98,14 @@ $(function(){initNavTree('config_8hpp.html','',''); });
 <div class="textblock"><code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
-<code>#include &quot;<a class="el" href="network_8hpp_source.html">imagenn/network.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="model_8hpp_source.html">imagenn/model.hpp</a>&quot;</code><br />
 </div>
 <p><a href="config_8hpp_source.html">См. исходные тексты.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Классы</h2></td></tr>
 <tr class="memitem:imagenn_3A_3ALayerConfig" id="r_imagenn_3A_3ALayerConfig"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structimagenn_1_1_layer_config.html">imagenn::LayerConfig</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Описание одного слоя сети.  <a href="structimagenn_1_1_layer_config.html#details">Подробнее...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Описание одного слоя.  <a href="structimagenn_1_1_layer_config.html#details">Подробнее...</a><br /></td></tr>
 <tr class="memitem:imagenn_3A_3ATrainingConfig" id="r_imagenn_3A_3ATrainingConfig"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structimagenn_1_1_training_config.html">imagenn::TrainingConfig</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Параметры обучения.  <a href="structimagenn_1_1_training_config.html#details">Подробнее...</a><br /></td></tr>
 <tr class="memitem:imagenn_3A_3ANetworkConfig" id="r_imagenn_3A_3ANetworkConfig"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structimagenn_1_1_network_config.html">imagenn::NetworkConfig</a></td></tr>
@@ -126,8 +126,8 @@ $(function(){initNavTree('config_8hpp.html','',''); });
 <tr class="memdesc:a244631f5cc428edaba807af3d5168566"><td class="mdescLeft">&#160;</td><td class="mdescRight">Создаёт файл-шаблон конфигурации со стандартной архитектурой.  <br /></td></tr>
 <tr class="memitem:a45cc6414f32cb43100d54c8524867b17" id="r_a45cc6414f32cb43100d54c8524867b17"><td class="memItemLeft"><a class="el" href="structimagenn_1_1_network_config.html">NetworkConfig</a>&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a45cc6414f32cb43100d54c8524867b17">imagenn::default_config</a> ()</td></tr>
 <tr class="memdesc:a45cc6414f32cb43100d54c8524867b17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Возвращает конфигурацию стандартной архитектуры.  <br /></td></tr>
-<tr class="memitem:a44695ba9977b0dabee13e126c2a3fb00" id="r_a44695ba9977b0dabee13e126c2a3fb00"><td class="memItemLeft"><a class="el" href="classimagenn_1_1_neural_network.html">NeuralNetwork</a>&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a44695ba9977b0dabee13e126c2a3fb00">imagenn::build_network</a> (const <a class="el" href="structimagenn_1_1_network_config.html">NetworkConfig</a> &amp;config)</td></tr>
-<tr class="memdesc:a44695ba9977b0dabee13e126c2a3fb00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Строит сеть по конфигурации.  <br /></td></tr>
+<tr class="memitem:aa9645ae94bb09a8383db20fade5a5c5b" id="r_aa9645ae94bb09a8383db20fade5a5c5b"><td class="memItemLeft"><a class="el" href="classimagenn_1_1_model.html">Model</a>&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#aa9645ae94bb09a8383db20fade5a5c5b">imagenn::build_model</a> (const <a class="el" href="structimagenn_1_1_network_config.html">NetworkConfig</a> &amp;config)</td></tr>
+<tr class="memdesc:aa9645ae94bb09a8383db20fade5a5c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Строит модель по конфигурации.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
 <div class="textblock"><p>Конфигурация архитектуры сети и параметров обучения. </p>

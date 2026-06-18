@@ -249,24 +249,34 @@ TEST_CASE("loading missing loss history reports a path error") {
 }
 
 TEST_CASE("training examples are loaded with one-hot targets") {
-    const std::vector<TrainingExample> data = load_training_examples(IMAGENN_TEST_DATA_DIR);
+    const auto data = load_training_examples(IMAGENN_TEST_DATA_DIR);
     REQUIRE_FALSE(data.empty());
-    for (const TrainingExample& example : data) {
-        CHECK(example.first.size() == static_cast<std::size_t>(kInputSize));
+    for (const auto& example : data) {
+        CHECK(example.first.size() == kInputSize);
         CHECK(example.second.size() == static_cast<std::size_t>(kNumClasses));
         CHECK(std::accumulate(example.second.begin(), example.second.end(), 0.0) ==
               doctest::Approx(1.0));
     }
 
-    // Бинаризация должна давать смесь закрашенных и пустых пикселей.
-    const std::vector<double>& first = data.front().first;
-    const double filled = std::accumulate(first.begin(), first.end(), 0.0);
-    CHECK(filled > 0.0);
-    CHECK(filled < static_cast<double>(kInputSize));
+    // Нормированные значения лежат в [0, 1] и не все одинаковые.
+    const std::vector<double>& pixels = data.front().first.data;
+    double min_v = pixels[0];
+    double max_v = pixels[0];
+    for (double v : pixels) {
+        CHECK(v >= 0.0);
+        CHECK(v <= 1.0);
+        if (v < min_v) {
+            min_v = v;
+        }
+        if (v > max_v) {
+            max_v = v;
+        }
+    }
+    CHECK(max_v > min_v);
 }
 
 TEST_CASE("loading from a missing directory reports a path error") {
-    CHECK_THROWS_AS(load_inputs(temp_path("imagenn_no_such_dir")), PathError);
+    CHECK_THROWS_AS(load_images(temp_path("imagenn_no_such_dir")), PathError);
 }
 
 TEST_CASE("loss plot renders a header and rejects empty input") {
@@ -289,13 +299,39 @@ TEST_CASE("softmax handles large logits without overflow") {
     CHECK(out[0] > out[1]);
 }
 
-TEST_CASE("build_network builds the configured layers and rejects unknown activation") {
-    const NeuralNetwork ok = build_network(default_config());
-    CHECK(ok.layer_count() == 4); // входной слой плюс три из конфигурации
+TEST_CASE("build_model builds the configured layers and rejects unknown activation") {
+    const Model ok = build_model(default_config());
+    CHECK(ok.dense().layer_count() == 4); // входной слой плюс три из конфигурации
+    CHECK(ok.spatial_count() == 1);       // автоматически добавленный flatten
 
     NetworkConfig bad;
-    bad.layers.push_back({"dense", 4, "bogus", false, 0.1});
-    CHECK_THROWS_AS(build_network(bad), ValidationError);
+    bad.layers.push_back({"dense", 4, "bogus", false, 0.1, 0, 0, 0});
+    CHECK_THROWS_AS(build_model(bad), ValidationError);
+}
+
+TEST_CASE("a convolution config survives a save/load round trip") {
+    NetworkConfig config;
+    config.layers.push_back({"conv", 0, "relu", false, 0.1, 8, 3, 0});
+    config.layers.push_back({"maxpool", 0, "", false, 0.1, 0, 0, 2});
+    config.layers.push_back({"flatten", 0, "", false, 0.1, 0, 0, 0});
+    config.layers.push_back({"dense", 10, "softmax", false, 0.1, 0, 0, 0});
+
+    const std::string path = temp_path("imagenn_conv.config");
+    save_config(config, path);
+    const NetworkConfig restored = parse_config_file(path);
+
+    REQUIRE(restored.layers.size() == 4);
+    CHECK(restored.layers[0].type == "conv");
+    CHECK(restored.layers[0].filters == 8);
+    CHECK(restored.layers[0].kernel == 3);
+    CHECK(restored.layers[1].type == "maxpool");
+    CHECK(restored.layers[1].pool == 2);
+    CHECK(restored.layers[2].type == "flatten");
+    CHECK(restored.layers[3].type == "dense");
+
+    const Model model = build_model(restored);
+    CHECK(model.spatial_count() == 3);
+    std::filesystem::remove(path);
 }
 
 TEST_CASE("training rejects targets of the wrong size") {
@@ -344,28 +380,37 @@ TEST_CASE("loss history can be appended") {
     std::filesystem::remove(path);
 }
 
-TEST_CASE("image is converted to a binarized input vector") {
+TEST_CASE("image is converted to a normalized tensor") {
     const std::string image = std::string(IMAGENN_TEST_DATA_DIR) + "/0_1.png";
-    const std::vector<double> input = image_to_input(image);
-    REQUIRE(input.size() == static_cast<std::size_t>(kInputSize));
-    const double filled = std::accumulate(input.begin(), input.end(), 0.0);
-    CHECK(filled > 0.0);
-    CHECK(filled < static_cast<double>(kInputSize));
-    for (double value : input) {
-        CHECK((value == 0.0 || value == 1.0));
+    const Tensor input = image_to_tensor(image);
+    CHECK(input.channels == 1);
+    CHECK(input.size() == kInputSize);
+
+    double min_v = input.data[0];
+    double max_v = input.data[0];
+    for (double value : input.data) {
+        CHECK(value >= 0.0);
+        CHECK(value <= 1.0);
+        if (value < min_v) {
+            min_v = value;
+        }
+        if (value > max_v) {
+            max_v = value;
+        }
     }
+    CHECK(max_v > min_v);
 }
 
 TEST_CASE("reading a missing image reports a path error") {
-    CHECK_THROWS_AS(image_to_input(temp_path("imagenn_no_image.png")), PathError);
+    CHECK_THROWS_AS(image_to_tensor(temp_path("imagenn_no_image.png")), PathError);
 }
 
-TEST_CASE("inputs are loaded with file names") {
-    const std::vector<NamedInput> inputs = load_inputs(IMAGENN_TEST_DATA_DIR);
-    REQUIRE_FALSE(inputs.empty());
-    for (const NamedInput& sample : inputs) {
+TEST_CASE("images are loaded with file names") {
+    const std::vector<NamedImage> images = load_images(IMAGENN_TEST_DATA_DIR);
+    REQUIRE_FALSE(images.empty());
+    for (const NamedImage& sample : images) {
         CHECK_FALSE(sample.name.empty());
-        CHECK(sample.values.size() == static_cast<std::size_t>(kInputSize));
+        CHECK(sample.image.size() == kInputSize);
     }
 }
 
@@ -576,4 +621,30 @@ TEST_CASE("model weights restore an identical convolution network") {
     for (std::size_t i = 0; i < expected.size(); ++i) {
         CHECK(restored[i] == doctest::Approx(expected[i]));
     }
+}
+
+TEST_CASE("a saved convolution model reloads identically") {
+    set_random_seed(11);
+    Model source = make_conv_model();
+    Tensor image(1, 6, 6);
+    for (int i = 0; i < image.size(); ++i) {
+        image.data[static_cast<std::size_t>(i)] = 0.02 * i;
+    }
+    source.run(image);
+    const std::vector<double> expected = source.get_output();
+
+    const std::string path = temp_path("imagenn_conv_model.nn");
+    save_model(source, path);
+
+    set_random_seed(222);
+    Model target = make_conv_model();
+    load_model(target, path);
+    target.run(image);
+    const std::vector<double> restored = target.get_output();
+
+    REQUIRE(restored.size() == expected.size());
+    for (std::size_t i = 0; i < expected.size(); ++i) {
+        CHECK(restored[i] == doctest::Approx(expected[i]));
+    }
+    std::filesystem::remove(path);
 }

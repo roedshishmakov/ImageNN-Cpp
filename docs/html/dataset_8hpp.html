@@ -93,19 +93,19 @@ $(function(){initNavTree('dataset_8hpp.html','',''); });
 </div><!--header-->
 <div class="contents">
 
-<p>Загрузка изображений и подготовка обучающих данных.  
+<p>Загрузка изображений в тензоры и подготовка обучающих данных.  
 <a href="#details">Подробнее...</a></p>
 <div class="textblock"><code>#include &lt;string&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
-<code>#include &quot;<a class="el" href="network_8hpp_source.html">imagenn/network.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tensor_8hpp_source.html">imagenn/tensor.hpp</a>&quot;</code><br />
 </div>
 <p><a href="dataset_8hpp_source.html">См. исходные тексты.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Классы</h2></td></tr>
-<tr class="memitem:imagenn_3A_3ANamedInput" id="r_imagenn_3A_3ANamedInput"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structimagenn_1_1_named_input.html">imagenn::NamedInput</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Один загруженный для распознавания образец.  <a href="structimagenn_1_1_named_input.html#details">Подробнее...</a><br /></td></tr>
+<tr class="memitem:imagenn_3A_3ANamedImage" id="r_imagenn_3A_3ANamedImage"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structimagenn_1_1_named_image.html">imagenn::NamedImage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Изображение вместе с именем файла.  <a href="structimagenn_1_1_named_image.html#details">Подробнее...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Пространства имен</h2></td></tr>
@@ -114,26 +114,24 @@ $(function(){initNavTree('dataset_8hpp.html','',''); });
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Функции</h2></td></tr>
-<tr class="memitem:a2b3c04264783644f1696257cf9095b24" id="r_a2b3c04264783644f1696257cf9095b24"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a2b3c04264783644f1696257cf9095b24">imagenn::image_to_input</a> (const std::string &amp;path)</td></tr>
-<tr class="memdesc:a2b3c04264783644f1696257cf9095b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Преобразует файл изображения во входной вектор сети.  <br /></td></tr>
-<tr class="memitem:a3f489580904b61e411a46255c058b958" id="r_a3f489580904b61e411a46255c058b958"><td class="memItemLeft">std::vector&lt; <a class="el" href="structimagenn_1_1_named_input.html">NamedInput</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a3f489580904b61e411a46255c058b958">imagenn::load_inputs</a> (const std::string &amp;directory)</td></tr>
-<tr class="memdesc:a3f489580904b61e411a46255c058b958"><td class="mdescLeft">&#160;</td><td class="mdescRight">Загружает изображения из папки для распознавания.  <br /></td></tr>
-<tr class="memitem:aada0c4e8f4da7b5fa5f67c553d54f9dd" id="r_aada0c4e8f4da7b5fa5f67c553d54f9dd"><td class="memItemLeft">std::vector&lt; <a class="el" href="namespaceimagenn.html#a2f4805ed15da037b488bda51429eaa67">TrainingExample</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#aada0c4e8f4da7b5fa5f67c553d54f9dd">imagenn::load_training_examples</a> (const std::string &amp;directory)</td></tr>
-<tr class="memdesc:aada0c4e8f4da7b5fa5f67c553d54f9dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Загружает обучающие примеры из папки.  <br /></td></tr>
+<tr class="memitem:a420f0b3440d34a101008edc66c4c405f" id="r_a420f0b3440d34a101008edc66c4c405f"><td class="memItemLeft"><a class="el" href="structimagenn_1_1_tensor.html">Tensor</a>&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a420f0b3440d34a101008edc66c4c405f">imagenn::image_to_tensor</a> (const std::string &amp;path)</td></tr>
+<tr class="memdesc:a420f0b3440d34a101008edc66c4c405f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Преобразует файл изображения в нормированный тензор 1×kImageSize×kImageSize.  <br /></td></tr>
+<tr class="memitem:a39daeac9b81b723053af25629c649a19" id="r_a39daeac9b81b723053af25629c649a19"><td class="memItemLeft">std::vector&lt; <a class="el" href="structimagenn_1_1_named_image.html">NamedImage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a39daeac9b81b723053af25629c649a19">imagenn::load_images</a> (const std::string &amp;directory)</td></tr>
+<tr class="memdesc:a39daeac9b81b723053af25629c649a19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Загружает изображения из папки для распознавания.  <br /></td></tr>
+<tr class="memitem:a0d5ece2727486d164f86d7e9f83ef361" id="r_a0d5ece2727486d164f86d7e9f83ef361"><td class="memItemLeft">std::vector&lt; std::pair&lt; <a class="el" href="structimagenn_1_1_tensor.html">Tensor</a>, std::vector&lt; double &gt; &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a0d5ece2727486d164f86d7e9f83ef361">imagenn::load_training_examples</a> (const std::string &amp;directory)</td></tr>
+<tr class="memdesc:a0d5ece2727486d164f86d7e9f83ef361"><td class="mdescLeft">&#160;</td><td class="mdescRight">Загружает обучающие примеры из папки.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Переменные</h2></td></tr>
 <tr class="memitem:aab561a499f8c9fd867a9a3e942bb0e4e" id="r_aab561a499f8c9fd867a9a3e942bb0e4e"><td class="memItemLeft">constexpr int&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#aab561a499f8c9fd867a9a3e942bb0e4e">imagenn::kImageSize</a> = 16</td></tr>
 <tr class="memdesc:aab561a499f8c9fd867a9a3e942bb0e4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сторона, к которой приводится изображение перед подачей в сеть.  <br /></td></tr>
 <tr class="memitem:a513e2bbabdd17ec85182f06d8b13de7e" id="r_a513e2bbabdd17ec85182f06d8b13de7e"><td class="memItemLeft">constexpr int&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a513e2bbabdd17ec85182f06d8b13de7e">imagenn::kInputSize</a> = <a class="el" href="namespaceimagenn.html#aab561a499f8c9fd867a9a3e942bb0e4e">kImageSize</a> * <a class="el" href="namespaceimagenn.html#aab561a499f8c9fd867a9a3e942bb0e4e">kImageSize</a></td></tr>
-<tr class="memdesc:a513e2bbabdd17ec85182f06d8b13de7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Размер входного вектора сети (число пикселей квадратного изображения).  <br /></td></tr>
+<tr class="memdesc:a513e2bbabdd17ec85182f06d8b13de7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Число элементов изображения (для одноканального входа).  <br /></td></tr>
 <tr class="memitem:a51affdb12444807ba9f7d1966d8a11f1" id="r_a51affdb12444807ba9f7d1966d8a11f1"><td class="memItemLeft">constexpr int&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a51affdb12444807ba9f7d1966d8a11f1">imagenn::kNumClasses</a> = 10</td></tr>
 <tr class="memdesc:a51affdb12444807ba9f7d1966d8a11f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Число распознаваемых классов (цифры 0–9).  <br /></td></tr>
-<tr class="memitem:a968027cd8fbb78df8c3fab14454c1aa5" id="r_a968027cd8fbb78df8c3fab14454c1aa5"><td class="memItemLeft">constexpr double&#160;</td><td class="memItemRight"><a class="el" href="namespaceimagenn.html#a968027cd8fbb78df8c3fab14454c1aa5">imagenn::kPixelThreshold</a> = 170.0</td></tr>
-<tr class="memdesc:a968027cd8fbb78df8c3fab14454c1aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Порог яркости: пиксель темнее порога считается закрашенным.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
-<div class="textblock"><p>Загрузка изображений и подготовка обучающих данных. </p>
+<div class="textblock"><p>Загрузка изображений в тензоры и подготовка обучающих данных. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">

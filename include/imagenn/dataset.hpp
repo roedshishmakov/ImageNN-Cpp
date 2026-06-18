@@ -5,48 +5,49 @@
 #include <utility>
 #include <vector>
 
-#include "imagenn/network.hpp"
+#include "imagenn/tensor.hpp"
 
 /// @file dataset.hpp
-/// @brief Загрузка изображений и подготовка обучающих данных.
+/// @brief Загрузка изображений в тензоры и подготовка обучающих данных.
 
 namespace imagenn {
 
 /// Сторона, к которой приводится изображение перед подачей в сеть.
 constexpr int kImageSize = 16;
-/// Размер входного вектора сети (число пикселей квадратного изображения).
+/// Число элементов изображения (для одноканального входа).
 constexpr int kInputSize = kImageSize * kImageSize;
 /// Число распознаваемых классов (цифры 0–9).
 constexpr int kNumClasses = 10;
-/// Порог яркости: пиксель темнее порога считается закрашенным.
-constexpr double kPixelThreshold = 170.0;
 
-/// @brief Один загруженный для распознавания образец.
-struct NamedInput {
-    std::string name;           ///< Имя файла образца.
-    std::vector<double> values; ///< Входной вектор длины kInputSize.
+/// @brief Изображение вместе с именем файла.
+struct NamedImage {
+    std::string name; ///< Имя файла.
+    Tensor image;     ///< Нормированный тензор изображения.
 };
 
-/// @brief Преобразует файл изображения во входной вектор сети.
+/// @brief Преобразует файл изображения в нормированный тензор 1×kImageSize×kImageSize.
+///
+/// Изображение приводится к оттенкам серого, масштабируется и нормируется в [0, 1].
 /// @param path путь к файлу изображения
-/// @return бинаризованный вектор длины kInputSize
+/// @return тензор со значениями в диапазоне [0, 1]
 /// @throws PathError если изображение не удаётся прочитать
-std::vector<double> image_to_input(const std::string& path);
+Tensor image_to_tensor(const std::string& path);
 
 /// @brief Загружает изображения из папки для распознавания.
 /// @param directory путь к папке с изображениями
-/// @return образцы с именами файлов, отсортированные по имени
+/// @return изображения с именами файлов, отсортированные по имени
 /// @throws PathError если папка не существует
-std::vector<NamedInput> load_inputs(const std::string& directory);
+std::vector<NamedImage> load_images(const std::string& directory);
 
 /// @brief Загружает обучающие примеры из папки.
 ///
 /// Метка класса берётся из имени файла до первого символа '_'.
 /// @param directory путь к папке с изображениями
-/// @return обучающие примеры с one-hot эталонами
+/// @return пары (тензор изображения, one-hot эталон)
 /// @throws PathError если папка не существует
 /// @throws ValidationError если метку в имени файла не удаётся разобрать
-std::vector<TrainingExample> load_training_examples(const std::string& directory);
+std::vector<std::pair<Tensor, std::vector<double>>>
+load_training_examples(const std::string& directory);
 
 } // namespace imagenn
 
