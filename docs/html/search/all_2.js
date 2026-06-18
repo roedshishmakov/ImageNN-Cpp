@@ -3,8 +3,10 @@ var searchData=
   ['c_0',['ImageNN C++',['../index.html',1,'']]],
   ['calc_1',['calc',['../classimagenn_1_1_activation_base.html#a8ae323bc7bd053921cd5b089bdca628a',1,'imagenn::ActivationBase::calc()'],['../classimagenn_1_1_activation_transparent.html#aa8e4a8632b19589322f2b415c11138f4',1,'imagenn::ActivationTransparent::calc()'],['../classimagenn_1_1_activation_relu.html#a8b21773e1634f8ebcbf00b73a622a4cd',1,'imagenn::ActivationRelu::calc()'],['../classimagenn_1_1_activation_sigmoid.html#a18736083192548f72a160bf2f772f876',1,'imagenn::ActivationSigmoid::calc()'],['../classimagenn_1_1_activation_softmax.html#a67f12573d3388e4b98b6ae3dd7660ea4',1,'imagenn::ActivationSoftmax::calc()'],['../classimagenn_1_1_layer.html#aa9891a50361fab7c108a027ac0bad882',1,'imagenn::Layer::calc()'],['../classimagenn_1_1_layer_softmax.html#afca8fc63ce5d9e5045a803d62ff26309',1,'imagenn::LayerSoftmax::calc()']]],
   ['calc_5flayer_2',['calc_layer',['../classimagenn_1_1_activation_softmax.html#a1c2442b5aa3b7b5e083cdaf8f98bab2b',1,'imagenn::ActivationSoftmax']]],
-  ['clip_5fvalue_3',['clip_value',['../structimagenn_1_1_training_config.html#ac666ca33fa31ac6f9e7943bf597067ac',1,'imagenn::TrainingConfig']]],
-  ['config_2ehpp_4',['config.hpp',['../config_8hpp.html',1,'']]],
-  ['connect_5flast_5ftwo_5',['connect_last_two',['../classimagenn_1_1_neural_network.html#a937d50be20aeb4da56558017be867ff5',1,'imagenn::NeuralNetwork']]],
-  ['create_5fconfig_5ftemplate_6',['create_config_template',['../namespaceimagenn.html#a244631f5cc428edaba807af3d5168566',1,'imagenn']]]
+  ['channels_3',['channels',['../structimagenn_1_1_tensor.html#ac6ba8ece1e95deb90ef8ceb9a03ebd3e',1,'imagenn::Tensor']]],
+  ['clip_5fvalue_4',['clip_value',['../structimagenn_1_1_training_config.html#ac666ca33fa31ac6f9e7943bf597067ac',1,'imagenn::TrainingConfig']]],
+  ['config_2ehpp_5',['config.hpp',['../config_8hpp.html',1,'']]],
+  ['connect_5flast_5ftwo_6',['connect_last_two',['../classimagenn_1_1_neural_network.html#a937d50be20aeb4da56558017be867ff5',1,'imagenn::NeuralNetwork']]],
+  ['convlayer_7',['ConvLayer',['../classimagenn_1_1_conv_layer.html',1,'imagenn::ConvLayer'],['../classimagenn_1_1_conv_layer.html#af1ad8dd6fd1bc8054e5b8656d406860e',1,'imagenn::ConvLayer::ConvLayer()']]],
+  ['create_5fconfig_5ftemplate_8',['create_config_template',['../namespaceimagenn.html#a244631f5cc428edaba807af3d5168566',1,'imagenn']]]
 ];

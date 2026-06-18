@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "imagenn/model.hpp"
 #include "imagenn/network.hpp"
 
 /// @file model_io.hpp
@@ -23,6 +24,19 @@ void save_model(const NeuralNetwork& network, const std::string& path);
 /// @throws PathError если файл не найден
 /// @throws ValidationError при несоответствии формата или структуры сети
 void load_model(NeuralNetwork& network, const std::string& path);
+
+/// @brief Сохраняет модель (свёрточную и полносвязную части) в текстовый файл.
+/// @param model модель для сохранения
+/// @param path путь к файлу модели
+/// @throws PathError если файл не удаётся открыть на запись
+void save_model(const Model& model, const std::string& path);
+
+/// @brief Загружает веса в модель из текстового файла.
+/// @param model модель, в которую загружаются веса
+/// @param path путь к файлу модели
+/// @throws PathError если файл не найден
+/// @throws ValidationError при несоответствии формата или структуры модели
+void load_model(Model& model, const std::string& path);
 
 /// @brief Сохраняет историю потерь в файл, по одному значению на строку.
 /// @param losses значения потерь

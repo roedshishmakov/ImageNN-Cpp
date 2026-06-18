@@ -6,8 +6,9 @@ var searchData=
   ['link_3',['Link',['../classimagenn_1_1_link.html#a8c4499429c9b1639fa5eb9be4da4039f',1,'imagenn::Link']]],
   ['links_5finput_4',['links_input',['../classimagenn_1_1_neuron.html#a61a66098fda214cdb9af366566ead1e2',1,'imagenn::Neuron']]],
   ['links_5foutput_5',['links_output',['../classimagenn_1_1_neuron.html#ad4157b53050642f6ed8a395e1650ba11',1,'imagenn::Neuron']]],
-  ['load_5finputs_6',['load_inputs',['../namespaceimagenn.html#a3f489580904b61e411a46255c058b958',1,'imagenn']]],
-  ['load_5flosses_7',['load_losses',['../namespaceimagenn.html#adedc18280a9f05a28bf020d3c1e147b7',1,'imagenn']]],
-  ['load_5fmodel_8',['load_model',['../namespaceimagenn.html#a74d846c34eb7ec66a38bc6596ac12d68',1,'imagenn']]],
-  ['load_5ftraining_5fexamples_9',['load_training_examples',['../namespaceimagenn.html#aada0c4e8f4da7b5fa5f67c553d54f9dd',1,'imagenn']]]
+  ['load_6',['load',['../classimagenn_1_1_conv_layer.html#ac84469f84e28ef3a799676ce4611265b',1,'imagenn::ConvLayer']]],
+  ['load_5fimages_7',['load_images',['../namespaceimagenn.html#a39daeac9b81b723053af25629c649a19',1,'imagenn']]],
+  ['load_5flosses_8',['load_losses',['../namespaceimagenn.html#adedc18280a9f05a28bf020d3c1e147b7',1,'imagenn']]],
+  ['load_5fmodel_9',['load_model',['../namespaceimagenn.html#a74d846c34eb7ec66a38bc6596ac12d68',1,'imagenn::load_model(NeuralNetwork &amp;network, const std::string &amp;path)'],['../namespaceimagenn.html#ad1ac6e45b0d0db748868fd59b9ff8aed',1,'imagenn::load_model(Model &amp;model, const std::string &amp;path)']]],
+  ['load_5ftraining_5fexamples_10',['load_training_examples',['../namespaceimagenn.html#a0d5ece2727486d164f86d7e9f83ef361',1,'imagenn']]]
 ];

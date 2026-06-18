@@ -48,6 +48,22 @@ class NeuralNetwork {
     double train(const std::vector<TrainingExample>& data, double speed, bool verbose = false,
                  double clip_value = 5.0, bool use_clip = true);
 
+    /// @brief Возвращает градиент по значениям входного слоя.
+    ///
+    /// Действителен после обратного прохода и до применения дельт.
+    /// @return градиент по каждому входу сети
+    std::vector<double> input_gradient() const;
+
+    /// @brief Выполняет обратный проход для одного примера; run() должен быть уже вызван.
+    /// @param target эталонный вектор
+    /// @param speed скорость обучения
+    /// @param clip_value порог ограничения дельты веса
+    /// @param use_clip применять ли ограничение
+    /// @param input_grad_out если не nullptr, сюда записывается градиент по входу
+    /// @return потеря на этом примере
+    double backward_step(const std::vector<double>& target, double speed, double clip_value,
+                         bool use_clip, std::vector<double>* input_grad_out);
+
     /// @brief Экспортирует веса всех слоёв.
     /// @return веса по слоям и нейронам
     std::vector<std::vector<std::vector<double>>> export_weights() const;

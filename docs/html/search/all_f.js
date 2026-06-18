@@ -1,16 +1,11 @@
 var searchData=
 [
-  ['save_5fconfig_0',['save_config',['../namespaceimagenn.html#ad71650d2fa3cee2d4f42533dc7333ad4',1,'imagenn']]],
-  ['save_5flosses_1',['save_losses',['../namespaceimagenn.html#a8fac835b0191fdb3eeb343855e13bc29',1,'imagenn']]],
-  ['save_5fmodel_2',['save_model',['../namespaceimagenn.html#ac3499cdba297ecf1969f955fd950e945',1,'imagenn']]],
-  ['send_3',['send',['../classimagenn_1_1_layer.html#a133a8c4e8eaa228d054dc2b4079d803d',1,'imagenn::Layer::send()'],['../classimagenn_1_1_link.html#acc9bb50f80cca461a5f02b47b846f233',1,'imagenn::Link::send()'],['../classimagenn_1_1_neuron.html#af5d0fb73854e6a3ae1e238445f04ba4a',1,'imagenn::Neuron::send() const']]],
-  ['set_5foutput_4',['set_output',['../classimagenn_1_1_neuron.html#a3ad66fef644f715cbcd1934a6107a567',1,'imagenn::Neuron']]],
-  ['set_5frandom_5fseed_5',['set_random_seed',['../namespaceimagenn.html#aaf6995e5196db41b5dae2905a2b4e2ec',1,'imagenn']]],
-  ['set_5fweight_5fdelta_6',['set_weight_delta',['../classimagenn_1_1_link.html#ac79e18615a6b8f54bb5dadb9986b88ba',1,'imagenn::Link']]],
-  ['set_5fweight_5fdelta_5fparam_7',['set_weight_delta_param',['../classimagenn_1_1_link.html#a24ee0c97bf68101421a8cf5f14296685',1,'imagenn::Link']]],
-  ['show_5floss_5fascii_8',['show_loss_ascii',['../namespaceimagenn.html#a6fcea2922fe9f1c33b9ec971efe1ba3d',1,'imagenn']]],
-  ['sigmoid_5factivation_9',['sigmoid_activation',['../namespaceimagenn.html#a44574509ecfb3e3a93c350f013427e65',1,'imagenn']]],
-  ['size_10',['size',['../structimagenn_1_1_layer_config.html#aa917adf49548edd96b10c2034f0cd22d',1,'imagenn::LayerConfig::size'],['../classimagenn_1_1_layer.html#a2c4fcce9fc8b482fba034cf823d6b4f2',1,'imagenn::Layer::size()']]],
-  ['softmax_11',['Softmax',['../namespaceimagenn.html#a4af68ccc452cbf4a2f0202a105d2bc24a31d953b9d49a6b4378f45097047976d0',1,'imagenn']]],
-  ['softmax_5factivation_12',['softmax_activation',['../namespaceimagenn.html#a1b4d367f8c3d072551df0ba1fe397fbd',1,'imagenn']]]
+  ['random_5fradius_0',['random_radius',['../structimagenn_1_1_layer_config.html#ae8226e8ab54e6a9f9ccf456659e3e06b',1,'imagenn::LayerConfig']]],
+  ['random_5funiform_1',['random_uniform',['../namespaceimagenn.html#a1c2ebbde1b07a5043571d9f0bc19e166',1,'imagenn']]],
+  ['readme_2emd_2',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
+  ['regular_3',['Regular',['../namespaceimagenn.html#a4af68ccc452cbf4a2f0202a105d2bc24ad2203cb1237cb6460cbad94564e39345',1,'imagenn']]],
+  ['relu_5factivation_4',['relu_activation',['../namespaceimagenn.html#a726f580bcfa9f3e22b58733e35a6f0dd',1,'imagenn']]],
+  ['reset_5',['reset',['../classimagenn_1_1_layer.html#a90de8a2c1611955734428edcccc59b98',1,'imagenn::Layer::reset()'],['../classimagenn_1_1_layer.html#a2c80c445732bddb6fb2e4ee6e319e947',1,'imagenn::Layer::reset(const std::vector&lt; double &gt; &amp;input)'],['../classimagenn_1_1_neuron.html#a6d30cdef2d2777b0b243c55da39648fc',1,'imagenn::Neuron::reset()'],['../classimagenn_1_1_bias_neuron.html#a8c3f213b57a7a28e5ec4618f7255e61d',1,'imagenn::BiasNeuron::reset()']]],
+  ['rng_2ehpp_6',['rng.hpp',['../rng_8hpp.html',1,'']]],
+  ['run_7',['run',['../classimagenn_1_1_model.html#a9fc2d2a9b50fabf544f725758e2a4518',1,'imagenn::Model::run()'],['../classimagenn_1_1_neural_network.html#a71296006cf63731e22a8d6768c545368',1,'imagenn::NeuralNetwork::run()']]]
 ];

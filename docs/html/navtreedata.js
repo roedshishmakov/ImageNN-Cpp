@@ -73,7 +73,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "activations_8hpp.html",
-"classimagenn_1_1_validation_error.html"
+"classimagenn_1_1_neural_network.html#a71296006cf63731e22a8d6768c545368",
+"structimagenn_1_1_tensor.html#aa17b0343505ad65802e24b4b330f7b9d"
 ];
 
 var SYNCONMSG = 'нажмите на выключить для синхронизации панелей';

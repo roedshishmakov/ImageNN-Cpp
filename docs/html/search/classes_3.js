@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['incorrectcommand_0',['IncorrectCommand',['../classimagenn_1_1_incorrect_command.html',1,'imagenn']]]
+  ['epocherror_0',['EpochError',['../classimagenn_1_1_epoch_error.html',1,'imagenn']]]
 ];
