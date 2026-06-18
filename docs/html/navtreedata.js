@@ -34,16 +34,17 @@ var NAVTREE =
       [ "Команды", "index.html#autotoc_md7", null ],
       [ "Опции путей", "index.html#autotoc_md8", null ]
     ] ],
-    [ "Сценарии использования", "index.html#autotoc_md9", [
-      [ "Быстрое обучение и проверка", "index.html#autotoc_md10", null ],
-      [ "Обучение по своей конфигурации", "index.html#autotoc_md11", null ],
-      [ "Дообучение", "index.html#autotoc_md12", null ],
-      [ "Свои пути к папкам", "index.html#autotoc_md13", null ]
+    [ "Готовая модель", "index.html#autotoc_md9", null ],
+    [ "Сценарии использования", "index.html#autotoc_md10", [
+      [ "Быстрое обучение и проверка", "index.html#autotoc_md11", null ],
+      [ "Обучение по своей конфигурации", "index.html#autotoc_md12", null ],
+      [ "Дообучение", "index.html#autotoc_md13", null ],
+      [ "Свои пути к папкам", "index.html#autotoc_md14", null ]
     ] ],
-    [ "Формат конфигурации", "index.html#autotoc_md14", null ],
-    [ "Формат датасета", "index.html#autotoc_md15", null ],
-    [ "Структура проекта", "index.html#autotoc_md16", null ],
-    [ "Обработка ошибок", "index.html#autotoc_md17", null ],
+    [ "Формат конфигурации", "index.html#autotoc_md15", null ],
+    [ "Формат датасета", "index.html#autotoc_md16", null ],
+    [ "Структура проекта", "index.html#autotoc_md17", null ],
+    [ "Обработка ошибок", "index.html#autotoc_md18", null ],
     [ "Пространства имен", "namespaces.html", [
       [ "Пространства имен", "namespaces.html", "namespaces_dup" ],
       [ "Члены пространств имен", "namespacemembers.html", [
@@ -74,7 +75,7 @@ var NAVTREEINDEX =
 [
 "activations_8hpp.html",
 "classimagenn_1_1_neural_network.html#a71296006cf63731e22a8d6768c545368",
-"structimagenn_1_1_tensor.html#aa17b0343505ad65802e24b4b330f7b9d"
+"structimagenn_1_1_tensor.html#a2324c30130d68e64762fd8e4dce8e11a"
 ];
 
 var SYNCONMSG = 'нажмите на выключить для синхронизации панелей';
