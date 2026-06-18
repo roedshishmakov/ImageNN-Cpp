@@ -133,6 +133,11 @@ NetworkConfig parse_config_file(const std::string& path) {
 
     while (std::getline(file, raw)) {
         ++line_number;
+        // Удаляем BOM (метку UTF-8), которую добавляет, например, Блокнот Windows.
+        if (line_number == 1 && raw.size() >= 3 && static_cast<unsigned char>(raw[0]) == 0xEF &&
+            static_cast<unsigned char>(raw[1]) == 0xBB && static_cast<unsigned char>(raw[2]) == 0xBF) {
+            raw.erase(0, 3);
+        }
         const std::string line = trim(raw);
 
         if (line.empty() || line[0] == '#') {
