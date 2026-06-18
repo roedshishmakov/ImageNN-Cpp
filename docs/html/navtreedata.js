@@ -73,7 +73,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "activations_8hpp.html",
-"config_8hpp.html"
+"classimagenn_1_1_validation_error.html"
 ];
 
 var SYNCONMSG = 'нажмите на выключить для синхронизации панелей';

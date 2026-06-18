@@ -117,6 +117,8 @@ $(function(){initNavTree('classimagenn_1_1_activation_base.html','','classimagen
 <tr class="memdesc:a8ae323bc7bd053921cd5b089bdca628a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вычисляет значение функции активации.  <br /></td></tr>
 <tr class="memitem:addda70d67b542371bbc01bcad79d5598" id="r_addda70d67b542371bbc01bcad79d5598"><td class="memItemLeft">virtual double&#160;</td><td class="memItemRight"><a class="el" href="#addda70d67b542371bbc01bcad79d5598">derivative</a> (double x) const =0</td></tr>
 <tr class="memdesc:addda70d67b542371bbc01bcad79d5598"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вычисляет значение производной функции активации.  <br /></td></tr>
+<tr class="memitem:a3ea4aaaae806ea7ec401e52985c635ce" id="r_a3ea4aaaae806ea7ec401e52985c635ce"><td class="memItemLeft">virtual bool&#160;</td><td class="memItemRight"><a class="el" href="#a3ea4aaaae806ea7ec401e52985c635ce">is_softmax</a> () const</td></tr>
+<tr class="memdesc:a3ea4aaaae806ea7ec401e52985c635ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сообщает, является ли функция softmax.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
 <div class="textblock"><p>Родительский класс функции активации. </p>
@@ -217,6 +219,36 @@ $(function(){initNavTree('classimagenn_1_1_activation_base.html','','classimagen
 <dl class="section return"><dt>Возвращает</dt><dd>значение производной </dd></dl>
 
 <p>Замещается в <a class="el" href="classimagenn_1_1_activation_relu.html#a57a77cd7de317abd1e0ad8d47aa01bd4">imagenn::ActivationRelu</a>, <a class="el" href="classimagenn_1_1_activation_sigmoid.html#a873dcc06f83613db3235a70581aadf57">imagenn::ActivationSigmoid</a>, <a class="el" href="classimagenn_1_1_activation_softmax.html#a87e5b4f9f2e874721875ae650c2aaaa5">imagenn::ActivationSoftmax</a> и <a class="el" href="classimagenn_1_1_activation_transparent.html#abcce2e36c23c8e5b075162159d317d1d">imagenn::ActivationTransparent</a>.</p>
+
+</div>
+</div>
+<a id="a3ea4aaaae806ea7ec401e52985c635ce" name="a3ea4aaaae806ea7ec401e52985c635ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ea4aaaae806ea7ec401e52985c635ce">&#9670;&#160;</a></span>is_softmax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool imagenn::ActivationBase::is_softmax </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Сообщает, является ли функция softmax. </p>
+<dl class="section return"><dt>Возвращает</dt><dd>true только для функции softmax </dd></dl>
+
+<p>Переопределяется в <a class="el" href="classimagenn_1_1_activation_softmax.html#af253a9906c81d40f5fd1b83e7a323885">imagenn::ActivationSoftmax</a>.</p>
 
 </div>
 </div>

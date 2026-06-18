@@ -2,7 +2,6 @@
 
 #include <cmath>
 #include <iostream>
-#include <limits>
 
 #include "imagenn/exceptions.hpp"
 #include "imagenn/neuron.hpp"
@@ -17,7 +16,7 @@ void NeuralNetwork::add_input_layer(std::size_t size) {
 
 void NeuralNetwork::add_layer(std::size_t size, const ActivationBase& activation,
                               double random_radius, bool use_bias) {
-    if (dynamic_cast<const ActivationSoftmax*>(&activation) != nullptr) {
+    if (activation.is_softmax()) {
         layers_.push_back(std::make_unique<LayerSoftmax>(size));
     } else {
         layers_.push_back(std::make_unique<Layer>(NeuronType::Regular, size, activation, use_bias));
@@ -81,8 +80,8 @@ double NeuralNetwork::train(const std::vector<TrainingExample>& data, double spe
 
         output_layer.back_propagation_output_l(refs, speed);
 
-        for (std::size_t i = layers_.size() - 1; i-- > 0;) {
-            layers_[i]->back_propagation_hidden_l(speed);
+        for (int i = static_cast<int>(layers_.size()) - 2; i >= 0; --i) {
+            layers_[static_cast<std::size_t>(i)]->back_propagation_hidden_l(speed);
         }
 
         if (use_clip) {
@@ -144,9 +143,9 @@ std::vector<double> NeuralNetwork::get_output() const {
 
 int NeuralNetwork::get_best_index() const {
     const std::vector<double> output = get_output();
-    int best_index = -1;
-    double best_value = -std::numeric_limits<double>::infinity();
-    for (std::size_t i = 0; i < output.size(); ++i) {
+    int best_index = 0;
+    double best_value = output[0];
+    for (std::size_t i = 1; i < output.size(); ++i) {
         if (output[i] > best_value) {
             best_value = output[i];
             best_index = static_cast<int>(i);
