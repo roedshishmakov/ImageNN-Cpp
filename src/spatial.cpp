@@ -9,6 +9,14 @@ void SpatialLayer::apply(double, double, bool) {
     // Базовый слой без весов: применять нечего.
 }
 
+std::vector<double> SpatialLayer::export_weights() const {
+    return std::vector<double>();
+}
+
+void SpatialLayer::import_weights(const std::vector<double>&) {
+    // Базовый слой без весов: загружать нечего.
+}
+
 namespace {
 void check_input(const Tensor& input, int c, int h, int w) {
     if (input.channels != c || input.height != h || input.width != w) {
@@ -131,6 +139,24 @@ void ConvLayer::load(const std::vector<double>& weights, const std::vector<doubl
     }
     weights_ = weights;
     biases_ = biases;
+}
+
+std::vector<double> ConvLayer::export_weights() const {
+    std::vector<double> result = weights_;
+    result.insert(result.end(), biases_.begin(), biases_.end());
+    return result;
+}
+
+void ConvLayer::import_weights(const std::vector<double>& weights) {
+    if (weights.size() != weights_.size() + biases_.size()) {
+        throw ValidationError("Convolution parameter size does not match the layer");
+    }
+    for (std::size_t i = 0; i < weights_.size(); ++i) {
+        weights_[i] = weights[i];
+    }
+    for (std::size_t i = 0; i < biases_.size(); ++i) {
+        biases_[i] = weights[weights_.size() + i];
+    }
 }
 
 MaxPoolLayer::MaxPoolLayer(int in_channels, int in_height, int in_width, int pool) : pool_(pool) {

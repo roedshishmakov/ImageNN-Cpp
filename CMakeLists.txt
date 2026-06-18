@@ -72,6 +72,7 @@ add_library(imagenn_core STATIC
     src/dataset.cpp
     src/plot.cpp
     src/spatial.cpp
+    src/model.cpp
 )
 target_include_directories(imagenn_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(imagenn_core PUBLIC stb_image)

@@ -36,6 +36,14 @@ class SpatialLayer {
     /// @param use_clip применять ли ограничение
     virtual void apply(double speed, double clip_value, bool use_clip);
 
+    /// @brief Экспортирует обучаемые параметры слоя.
+    /// @return параметры слоя (пустой вектор для слоёв без весов)
+    virtual std::vector<double> export_weights() const;
+
+    /// @brief Загружает обучаемые параметры слоя.
+    /// @param weights параметры в порядке export_weights()
+    virtual void import_weights(const std::vector<double>& weights);
+
     /// @brief Число каналов выхода.
     /// @return каналы выхода
     int out_channels() const { return out_c_; }
@@ -75,6 +83,8 @@ class ConvLayer : public SpatialLayer {
     Tensor forward(const Tensor& input) override;
     Tensor backward(const Tensor& grad_output) override;
     void apply(double speed, double clip_value, bool use_clip) override;
+    std::vector<double> export_weights() const override;
+    void import_weights(const std::vector<double>& weights) override;
 
     /// @brief Возвращает веса всех фильтров (для сохранения модели).
     /// @return веса в порядке (фильтр, канал, строка, столбец)
