@@ -24,6 +24,10 @@ class ActivationBase {
     /// @param x входное значение
     /// @return значение производной
     virtual double derivative(double x) const = 0;
+
+    /// @brief Сообщает, является ли функция softmax.
+    /// @return true только для функции softmax
+    virtual bool is_softmax() const { return false; }
 };
 
 /// @brief Прозрачная функция активации. На выходе то же значение, что и на входе.
@@ -91,6 +95,10 @@ class ActivationSoftmax : public ActivationBase {
     /// @return вектор вероятностей той же длины, сумма которых равна 1
     /// @throws std::invalid_argument если входной вектор пуст
     static std::vector<double> calc_layer(const std::vector<double>& layer_outputs);
+
+    /// @brief Сообщает, что это функция softmax.
+    /// @return всегда true
+    bool is_softmax() const override { return true; }
 };
 
 /// @brief Возвращает разделяемый экземпляр прозрачной функции активации.

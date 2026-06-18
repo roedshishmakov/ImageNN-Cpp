@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['from_5f_0',['from_',['../classimagenn_1_1_link.html#a8a9dadc4b9576198e803fb993bcd3961',1,'imagenn::Link']]]
+  ['epochs_0',['epochs',['../structimagenn_1_1_training_config.html#a801a23bd0f519a2aec0be0e1170aaac8',1,'imagenn::TrainingConfig']]]
 ];

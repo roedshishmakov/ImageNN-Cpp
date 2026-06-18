@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['epocherror_0',['EpochError',['../classimagenn_1_1_epoch_error.html',1,'imagenn']]]
+  ['convlayer_0',['ConvLayer',['../classimagenn_1_1_conv_layer.html',1,'imagenn']]]
 ];

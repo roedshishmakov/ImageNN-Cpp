@@ -5,20 +5,26 @@
 #include <string>
 #include <vector>
 
-#include "imagenn/network.hpp"
+#include "imagenn/model.hpp"
 
 /// @file config.hpp
 /// @brief Конфигурация архитектуры сети и параметров обучения.
 
 namespace imagenn {
 
-/// @brief Описание одного слоя сети.
+/// @brief Описание одного слоя.
+///
+/// Тип слоя задаётся полем type ("dense", "conv", "maxpool", "flatten");
+/// используются те поля, что относятся к данному типу.
 struct LayerConfig {
-    std::string type;           ///< Тип слоя (поддерживается только "dense").
-    std::size_t size = 0;       ///< Количество нейронов.
-    std::string activation;     ///< Имя функции активации.
-    bool use_bias = false;      ///< Использовать ли нейрон смещения.
-    double random_radius = 0.1; ///< Радиус инициализации весов.
+    std::string type;           ///< Тип слоя.
+    std::size_t size = 0;       ///< Число нейронов (dense).
+    std::string activation;     ///< Имя функции активации (dense, conv).
+    bool use_bias = false;      ///< Использовать ли смещение (dense).
+    double random_radius = 0.1; ///< Радиус инициализации весов (dense, conv).
+    int filters = 0;            ///< Число фильтров (conv).
+    int kernel = 0;             ///< Сторона ядра (conv).
+    int pool = 0;               ///< Сторона окна подвыборки (maxpool).
 };
 
 /// @brief Параметры обучения.
@@ -57,11 +63,15 @@ void create_config_template(const std::string& path);
 /// @return конфигурация по умолчанию
 NetworkConfig default_config();
 
-/// @brief Строит сеть по конфигурации.
+/// @brief Строит модель по конфигурации.
+///
+/// Свёрточные слои, подвыборка и выпрямление образуют экстрактор признаков; за
+/// ними следуют полносвязные слои. Если слой выпрямления не указан, он
+/// добавляется автоматически перед первым полносвязным слоем.
 /// @param config конфигурация сети
-/// @return построенная сеть
-/// @throws ValidationError если указана неизвестная функция активации
-NeuralNetwork build_network(const NetworkConfig& config);
+/// @return построенная модель
+/// @throws ValidationError если тип слоя неизвестен или порядок слоёв недопустим
+Model build_model(const NetworkConfig& config);
 
 } // namespace imagenn
 

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['trainingexample_0',['TrainingExample',['../namespaceimagenn.html#a2f4805ed15da037b488bda51429eaa67',1,'imagenn']]]
+  ['spatialexample_0',['SpatialExample',['../namespaceimagenn.html#a2bbb880d3db6d68a0ae15b24b4e8dc3a',1,'imagenn']]]
 ];

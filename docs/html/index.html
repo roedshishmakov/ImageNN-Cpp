@@ -99,6 +99,7 @@ $(function(){initNavTree('index.html','',''); });
 Возможности</h1>
 <ul>
 <li>Полносвязная нейронная сеть произвольной архитектуры, задаваемой конфигурацией.</li>
+<li>Свёрточные слои (Conv2D), подвыборка по максимуму (MaxPooling) и выпрямление (Flatten).</li>
 <li>Функции активации: Transparent, ReLU, Sigmoid, Softmax.</li>
 <li>Выходной слой softmax с обучением по кросс-энтропии.</li>
 <li>Обучение с нуля, дообучение сохранённой модели.</li>
@@ -175,8 +176,14 @@ $(function(){initNavTree('index.html','',''); });
 </table>
 <p>Файлы внутри папок: модель — <span class="tt">&lt;model&gt;.nn</span>, конфигурация — <span class="tt">&lt;model&gt;.config</span>, история потерь — <span class="tt">&lt;model&gt;.txt</span>.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+Готовая модель</h1>
+<p>В папке <span class="tt">models/</span> лежит предобученная свёрточная модель <span class="tt">cnn</span> (обучена на MNIST, точность около 97% на отложенной выборке). Чтобы классифицировать ею изображения:</p>
+<div class="fragment"><div class="line">imagenn --load cnn &lt;папка_с_изображениями&gt; \</div>
+<div class="line">        --configs-dir models --weights-dir models --loss-dir models</div>
+</div><!-- fragment --><p>Изображения должны быть рукописными цифрами в стиле MNIST (тёмная цифра на светлом фоне или наоборот); на картинках другого стиля точность будет ниже.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 Сценарии использования</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
 Быстрое обучение и проверка</h2>
 <div class="fragment"><div class="line"># обучить стандартную архитектуру на примерах из папки examples</div>
 <div class="line">imagenn --simple-train demo 10 examples</div>
@@ -205,7 +212,7 @@ $(function(){initNavTree('index.html','',''); });
 <div class="fragment"><div class="line">Test file: 0_1.png  Answer: 0</div>
 <div class="line">Test file: 1_1.png  Answer: 1</div>
 <div class="line">...</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 Обучение по своей конфигурации</h2>
 <div class="fragment"><div class="line"># создать шаблон конфигурации configs/my_config.config</div>
 <div class="line">imagenn --create-config my_config</div>
@@ -215,20 +222,19 @@ $(function(){initNavTree('index.html','',''); });
 <div class="line"> </div>
 <div class="line"># протестировать</div>
 <div class="line">imagenn --load my_model dataset/test</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 Дообучение</h2>
 <div class="fragment"><div class="line">imagenn --fine my_model 15 dataset/extra</div>
 <div class="line">imagenn --show-loss my_model</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
 Свои пути к папкам</h2>
 <div class="fragment"><div class="line">imagenn --simple-train demo 10 dataset/train \</div>
 <div class="line">        --weights-dir /data/models --loss-dir /data/losses --configs-dir /data/configs</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
 Формат конфигурации</h1>
-<p>Текстовый файл <span class="tt">&lt;name&gt;.config</span>:</p>
+<p>Текстовый файл <span class="tt">&lt;name&gt;.config</span> задаёт слои по порядку, затем параметры обучения. Поддерживаются свёрточные слои, подвыборка, выпрямление и полносвязные слои.</p>
+<p>Полносвязная сеть:</p>
 <div class="fragment"><div class="line"># Конфигурация нейронной сети</div>
-<div class="line"># Формат: [layer_type]:[size]:[activation]:[use_bias]:[random_radius]</div>
-<div class="line"> </div>
 <div class="line">dense:32:relu:true:0.1</div>
 <div class="line">dense:32:relu:true:0.1</div>
 <div class="line">dense:10:softmax:false:0.1</div>
@@ -238,14 +244,33 @@ $(function(){initNavTree('index.html','',''); });
 <div class="line">epochs=10</div>
 <div class="line">clip_value=5.0</div>
 <div class="line">use_cross_entropy=true</div>
-</div><!-- fragment --><ul>
-<li><span class="tt">layer_type</span> — всегда <span class="tt">dense</span>.</li>
-<li><span class="tt">activation</span> — <span class="tt">relu</span>, <span class="tt">sigmoid</span>, <span class="tt">softmax</span> или <span class="tt">transparent</span>.</li>
+</div><!-- fragment --><p>Свёрточная сеть:</p>
+<div class="fragment"><div class="line">conv:8:3:relu:0.1</div>
+<div class="line">maxpool:2</div>
+<div class="line">conv:16:3:relu:0.1</div>
+<div class="line">flatten</div>
+<div class="line">dense:32:relu:true:0.1</div>
+<div class="line">dense:10:softmax:false:0.1</div>
+<div class="line"> </div>
+<div class="line">learning_rate=0.05</div>
+<div class="line">epochs=10</div>
+<div class="line">clip_value=5.0</div>
+<div class="line">use_cross_entropy=true</div>
+</div><!-- fragment --><p>Форматы строк слоёв:</p>
+<ul>
+<li><span class="tt">dense:[size]:[activation]:[use_bias]:[random_radius]</span> — полносвязный слой.</li>
+<li><span class="tt">conv:[filters]:[kernel]:[activation]:[random_radius]</span> — свёрточный слой (шаг 1, без дополнения краёв).</li>
+<li><span class="tt">maxpool:[size]</span> — подвыборка по максимуму с окном size×size.</li>
+<li><span class="tt">flatten</span> — выпрямление карт признаков в вектор.</li>
+</ul>
+<p>Где:</p>
+<ul>
+<li><span class="tt">activation</span> — <span class="tt">relu</span>, <span class="tt">sigmoid</span>, <span class="tt">softmax</span> или <span class="tt">transparent</span> (для <span class="tt">conv</span> — кроме <span class="tt">softmax</span>).</li>
 <li><span class="tt">use_bias</span> — <span class="tt">true</span> или <span class="tt">false</span>.</li>
 <li><span class="tt">random_radius</span> — радиус равномерной инициализации весов.</li>
 </ul>
-<p>Входной слой (256 входов) добавляется автоматически.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+<p>Вход — изображение 16×16 в оттенках серого, приведённое к диапазону [0, 1]. Свёрточные слои и подвыборка должны идти до выпрямления, полносвязные — после. Если строка <span class="tt">flatten</span> не указана, выпрямление добавляется автоматически перед первым <span class="tt">dense</span>.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
 Формат датасета</h1>
 <ul>
 <li>Формат файлов: PNG или JPG.</li>
@@ -258,7 +283,7 @@ $(function(){initNavTree('index.html','',''); });
 <div class="line">├── 1_image1.png</div>
 <div class="line">├── 2_image1.png</div>
 <div class="line">└── ...</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
 Структура проекта</h1>
 <div class="fragment"><div class="line">ImageCPP/</div>
 <div class="line">├── CMakeLists.txt        сборка: библиотека + исполняемый файл + тесты</div>
@@ -270,7 +295,7 @@ $(function(){initNavTree('index.html','',''); });
 <div class="line">├── weight_saves/         сохранённые модели</div>
 <div class="line">├── loss_saves/           история потерь</div>
 <div class="line">└── docs/                 документация Doxygen (HTML)</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
 Обработка ошибок</h1>
 <p>Все ошибки сообщаются через исключения и обрабатываются на верхнем уровне. При ошибке программа печатает сообщение в stderr и возвращает код 1, при успехе — 0. </p>
 </div></div><!-- PageDoc -->

@@ -11,7 +11,8 @@ var hierarchy =
     ] ],
     [ "imagenn::LayerConfig", "structimagenn_1_1_layer_config.html", null ],
     [ "imagenn::Link", "classimagenn_1_1_link.html", null ],
-    [ "imagenn::NamedInput", "structimagenn_1_1_named_input.html", null ],
+    [ "imagenn::Model", "classimagenn_1_1_model.html", null ],
+    [ "imagenn::NamedImage", "structimagenn_1_1_named_image.html", null ],
     [ "imagenn::NetworkConfig", "structimagenn_1_1_network_config.html", null ],
     [ "imagenn::NeuralNetwork", "classimagenn_1_1_neural_network.html", null ],
     [ "imagenn::Neuron", "classimagenn_1_1_neuron.html", [
@@ -28,5 +29,11 @@ var hierarchy =
         [ "imagenn::ValidationError", "classimagenn_1_1_validation_error.html", null ]
       ] ]
     ] ],
+    [ "imagenn::SpatialLayer", "classimagenn_1_1_spatial_layer.html", [
+      [ "imagenn::ConvLayer", "classimagenn_1_1_conv_layer.html", null ],
+      [ "imagenn::FlattenLayer", "classimagenn_1_1_flatten_layer.html", null ],
+      [ "imagenn::MaxPoolLayer", "classimagenn_1_1_max_pool_layer.html", null ]
+    ] ],
+    [ "imagenn::Tensor", "structimagenn_1_1_tensor.html", null ],
     [ "imagenn::TrainingConfig", "structimagenn_1_1_training_config.html", null ]
 ];

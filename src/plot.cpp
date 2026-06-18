@@ -1,6 +1,5 @@
 #include "imagenn/plot.hpp"
 
-#include <algorithm>
 #include <iomanip>
 #include <ostream>
 #include <string>
@@ -18,7 +17,12 @@ void show_loss_ascii(const std::vector<double>& losses, std::ostream& out) {
         throw ValidationError("No loss values to display");
     }
 
-    const double max_loss = *std::max_element(losses.begin(), losses.end());
+    double max_loss = losses[0];
+    for (std::size_t i = 1; i < losses.size(); ++i) {
+        if (losses[i] > max_loss) {
+            max_loss = losses[i];
+        }
+    }
     const double scale = max_loss > 0.0 ? max_loss : 1.0;
 
     out << "Total loss\n";

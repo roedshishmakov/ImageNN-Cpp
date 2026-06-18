@@ -1,8 +1,7 @@
 #include "imagenn/dataset.hpp"
 
-#include <algorithm>
+#include <cctype>
 #include <filesystem>
-#include <memory>
 #include <string>
 
 #include "imagenn/exceptions.hpp"
@@ -18,8 +17,9 @@ namespace {
 
 bool is_image_file(const std::filesystem::path& path) {
     std::string ext = path.extension().string();
-    std::transform(ext.begin(), ext.end(), ext.begin(),
-                   [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+    for (std::size_t i = 0; i < ext.size(); ++i) {
+        ext[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(ext[i])));
+    }
     return ext == ".png" || ext == ".jpg" || ext == ".jpeg";
 }
 
@@ -34,7 +34,17 @@ std::vector<std::filesystem::path> list_images(const std::string& directory) {
             files.push_back(entry.path());
         }
     }
-    std::sort(files.begin(), files.end());
+
+    // Простая сортировка вставками по имени файла.
+    for (std::size_t i = 1; i < files.size(); ++i) {
+        std::filesystem::path current = files[i];
+        std::size_t j = i;
+        while (j > 0 && files[j - 1] > current) {
+            files[j] = files[j - 1];
+            --j;
+        }
+        files[j] = current;
+    }
     return files;
 }
 
@@ -50,42 +60,38 @@ int label_from_name(const std::filesystem::path& path) {
 
 } // namespace
 
-std::vector<double> image_to_input(const std::string& path) {
+Tensor image_to_tensor(const std::string& path) {
     int width = 0;
     int height = 0;
     int channels = 0;
-    // stb выделяет буфер сам; оборачиваем его в unique_ptr с освобождением через stb.
-    const auto free_image = [](unsigned char* data) { stbi_image_free(data); };
-    std::unique_ptr<unsigned char, decltype(free_image)> pixels(
-        stbi_load(path.c_str(), &width, &height, &channels, 3), free_image);
-    if (!pixels) {
+    unsigned char* pixels = stbi_load(path.c_str(), &width, &height, &channels, 1);
+    if (pixels == nullptr) {
         throw PathError("Cannot read image: " + path);
     }
 
-    std::vector<unsigned char> resized(static_cast<std::size_t>(kImageSize) * kImageSize * 3);
-    stbir_resize_uint8_linear(pixels.get(), width, height, 0, resized.data(), kImageSize,
-                              kImageSize, 0, STBIR_RGB);
+    std::vector<unsigned char> resized(static_cast<std::size_t>(kImageSize) * kImageSize);
+    stbir_resize_uint8_linear(pixels, width, height, 0, resized.data(), kImageSize, kImageSize, 0,
+                              STBIR_1CHANNEL);
+    stbi_image_free(pixels);
 
-    std::vector<double> result;
-    result.reserve(static_cast<std::size_t>(kInputSize));
+    Tensor tensor(1, kImageSize, kImageSize);
     for (int i = 0; i < kInputSize; ++i) {
-        const std::size_t base = static_cast<std::size_t>(i) * 3;
-        const double mean = (resized[base] + resized[base + 1] + resized[base + 2]) / 3.0;
-        result.push_back(mean < kPixelThreshold ? 1.0 : 0.0);
+        tensor.data[static_cast<std::size_t>(i)] = resized[static_cast<std::size_t>(i)] / 255.0;
     }
-    return result;
+    return tensor;
 }
 
-std::vector<NamedInput> load_inputs(const std::string& directory) {
-    std::vector<NamedInput> dataset;
+std::vector<NamedImage> load_images(const std::string& directory) {
+    std::vector<NamedImage> dataset;
     for (const auto& path : list_images(directory)) {
-        dataset.push_back({path.filename().string(), image_to_input(path.string())});
+        dataset.push_back({path.filename().string(), image_to_tensor(path.string())});
     }
     return dataset;
 }
 
-std::vector<TrainingExample> load_training_examples(const std::string& directory) {
-    std::vector<TrainingExample> dataset;
+std::vector<std::pair<Tensor, std::vector<double>>>
+load_training_examples(const std::string& directory) {
+    std::vector<std::pair<Tensor, std::vector<double>>> dataset;
     for (const auto& path : list_images(directory)) {
         const int label = label_from_name(path);
         if (label < 0 || label >= kNumClasses) {
@@ -93,7 +99,7 @@ std::vector<TrainingExample> load_training_examples(const std::string& directory
         }
         std::vector<double> target(static_cast<std::size_t>(kNumClasses), 0.0);
         target[static_cast<std::size_t>(label)] = 1.0;
-        dataset.emplace_back(image_to_input(path.string()), std::move(target));
+        dataset.emplace_back(image_to_tensor(path.string()), std::move(target));
     }
     return dataset;
 }
