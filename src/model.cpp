@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "imagenn/exceptions.hpp"
+#include "imagenn/rng.hpp"
 
 namespace imagenn {
 
@@ -35,7 +36,22 @@ double Model::train(const std::vector<SpatialExample>& data, double speed, bool 
                     double clip_value, bool use_clip) {
     double loss_total = 0.0;
 
-    for (std::size_t index = 0; index < data.size(); ++index) {
+    // Перемешиваем порядок примеров (Фишер–Йетс): без этого данные, отсортированные
+    // по классам, ведут к катастрофическому забыванию и предсказанию одного класса.
+    std::vector<std::size_t> order(data.size());
+    for (std::size_t i = 0; i < order.size(); ++i) {
+        order[i] = i;
+    }
+    for (std::size_t i = order.size(); i > 1; --i) {
+        std::size_t j = static_cast<std::size_t>(random_uniform(0.0, 1.0) * static_cast<double>(i));
+        if (j >= i) {
+            j = i - 1;
+        }
+        std::swap(order[i - 1], order[j]);
+    }
+
+    for (std::size_t step = 0; step < order.size(); ++step) {
+        const std::size_t index = order[step];
         const Tensor features = forward_features(data[index].first);
         dense_.run(features.data);
 
