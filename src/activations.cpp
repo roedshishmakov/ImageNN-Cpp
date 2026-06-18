@@ -1,10 +1,21 @@
 #include "imagenn/activations.hpp"
 
-#include <algorithm>
 #include <cmath>
 #include <stdexcept>
 
 namespace imagenn {
+
+namespace {
+double max_value(const std::vector<double>& values) {
+    double result = values[0];
+    for (std::size_t i = 1; i < values.size(); ++i) {
+        if (values[i] > result) {
+            result = values[i];
+        }
+    }
+    return result;
+}
+} // namespace
 
 double ActivationTransparent::calc(double x) const {
     return x;
@@ -45,7 +56,7 @@ std::vector<double> ActivationSoftmax::calc_layer(const std::vector<double>& lay
     }
 
     std::vector<double> values = layer_outputs;
-    double max_val = *std::max_element(values.begin(), values.end());
+    double max_val = max_value(values);
 
     // Большие значения масштабируются, чтобы std::exp не дал переполнения.
     if (max_val > 100.0) {
@@ -53,7 +64,7 @@ std::vector<double> ActivationSoftmax::calc_layer(const std::vector<double>& lay
         for (double& v : values) {
             v /= scale_factor;
         }
-        max_val = *std::max_element(values.begin(), values.end());
+        max_val = max_value(values);
     }
 
     double exp_sum = 0.0;

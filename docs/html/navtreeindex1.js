@@ -1,5 +1,9 @@
 var NAVTREEINDEX1 =
 {
+"classimagenn_1_1_validation_error.html":[11,0,0,14],
+"classimagenn_1_1_validation_error.html":[12,0,0,14],
+"classimagenn_1_1_validation_error.html#a7c713cec512e47172db6d2729a2c490d":[11,0,0,14,0],
+"classimagenn_1_1_validation_error.html#a7c713cec512e47172db6d2729a2c490d":[12,0,0,14,0],
 "config_8hpp.html":[13,0,0,0,1],
 "config_8hpp_source.html":[13,0,0,0,1],
 "dataset_8hpp.html":[13,0,0,0,2],

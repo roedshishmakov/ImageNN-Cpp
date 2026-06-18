@@ -6,6 +6,8 @@ var NAVTREEINDEX0 =
 "classes.html":[12,1],
 "classimagenn_1_1_activation_base.html":[11,0,0,0],
 "classimagenn_1_1_activation_base.html":[12,0,0,0],
+"classimagenn_1_1_activation_base.html#a3ea4aaaae806ea7ec401e52985c635ce":[11,0,0,0,3],
+"classimagenn_1_1_activation_base.html#a3ea4aaaae806ea7ec401e52985c635ce":[12,0,0,0,3],
 "classimagenn_1_1_activation_base.html#a8ae323bc7bd053921cd5b089bdca628a":[11,0,0,0,1],
 "classimagenn_1_1_activation_base.html#a8ae323bc7bd053921cd5b089bdca628a":[12,0,0,0,1],
 "classimagenn_1_1_activation_base.html#ac477d9d9a9361190c4eca40f8d42f135":[11,0,0,0,0],
@@ -32,6 +34,8 @@ var NAVTREEINDEX0 =
 "classimagenn_1_1_activation_softmax.html#a67f12573d3388e4b98b6ae3dd7660ea4":[12,0,0,4,0],
 "classimagenn_1_1_activation_softmax.html#a87e5b4f9f2e874721875ae650c2aaaa5":[11,0,0,4,2],
 "classimagenn_1_1_activation_softmax.html#a87e5b4f9f2e874721875ae650c2aaaa5":[12,0,0,4,2],
+"classimagenn_1_1_activation_softmax.html#af253a9906c81d40f5fd1b83e7a323885":[11,0,0,4,3],
+"classimagenn_1_1_activation_softmax.html#af253a9906c81d40f5fd1b83e7a323885":[12,0,0,4,3],
 "classimagenn_1_1_activation_transparent.html":[11,0,0,1],
 "classimagenn_1_1_activation_transparent.html":[12,0,0,1],
 "classimagenn_1_1_activation_transparent.html#aa8e4a8632b19589322f2b415c11138f4":[11,0,0,1,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX0 =
 "classimagenn_1_1_transparent_neuron.html#a03c053480c866a3b1adc36b6a44943de":[11,0,0,20,1],
 "classimagenn_1_1_transparent_neuron.html#a03c053480c866a3b1adc36b6a44943de":[12,0,0,20,1],
 "classimagenn_1_1_transparent_neuron.html#a122eda836621a34652802cebbf1dcf1b":[11,0,0,20,0],
-"classimagenn_1_1_transparent_neuron.html#a122eda836621a34652802cebbf1dcf1b":[12,0,0,20,0],
-"classimagenn_1_1_validation_error.html":[11,0,0,14],
-"classimagenn_1_1_validation_error.html":[12,0,0,14],
-"classimagenn_1_1_validation_error.html#a7c713cec512e47172db6d2729a2c490d":[11,0,0,14,0],
-"classimagenn_1_1_validation_error.html#a7c713cec512e47172db6d2729a2c490d":[12,0,0,14,0]
+"classimagenn_1_1_transparent_neuron.html#a122eda836621a34652802cebbf1dcf1b":[12,0,0,20,0]
 };
