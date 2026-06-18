@@ -4,7 +4,6 @@
 #include <cmath>
 
 #include "imagenn/exceptions.hpp"
-#include "imagenn/rng.hpp"
 
 namespace imagenn {
 
@@ -35,9 +34,11 @@ Layer::Layer(NeuronType type, std::size_t size, const ActivationBase& activation
     }
 
     if (use_bias) {
+        // Смещения инициализируются нулём: случайные смещения при активном bias
+        // заталкивают часть ReLU-нейронов в отрицательную зону и "убивают" их.
         bias_ = std::make_unique<BiasNeuron>(transparent_activation());
         for (auto& neuron : neurons_) {
-            links_.push_back(std::make_unique<Link>(*bias_, *neuron, random_uniform(-1.0, 1.0)));
+            links_.push_back(std::make_unique<Link>(*bias_, *neuron, 0.0));
             Link* link = links_.back().get();
             bias_->add_link_output(link);
             neuron->add_link_input(link);
